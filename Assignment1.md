@@ -1,7 +1,7 @@
 # HW 1
 #### Michael Partridge
 
-Hey Igor! I've been playing with [Asciidoctor](https://asciidoctor.org/) lately. GitHub supports it. I'm not sure any of the features are useful for this task, but it's been awesome use to create pdfs. I've even been using it for really simple slide shows. All through emacs! No more dragging, aligning, changing font sizes. The [Quick Reference](https://asciidoctor.org/docs/asciidoc-syntax-quick-reference/) shows the syntax or you can compare this file to the [adoc version]() I made. I've really been geeking out over it lately! Back to the HW!
+Hey Igor! I've been playing with [Asciidoctor](https://asciidoctor.org/) lately. GitHub supports it. I'm not sure any of the features are useful for this task, but it's been awesome use to create pdfs. I've even been using it for really simple slide shows. All through emacs! No more dragging, aligning, changing font sizes. The [Quick Reference](https://asciidoctor.org/docs/asciidoc-syntax-quick-reference/) shows the syntax or you can compare this file to the [adoc version]() I made. It really is too much for this task, but think about typing all your documents in markup, that's what Asciidoctor allows. I've really been geeking out over it lately! Back to the HW!
 
 # FIX LINK
 
@@ -10,16 +10,6 @@ Hey Igor! I've been playing with [Asciidoctor](https://asciidoctor.org/) lately.
 ## Problem 1
 
 
-**1. Write a function with the following signature:** `pythagoreanTheorem(length_a, length_b)`.
-
-The function returns the length of the hypotenuse assuming that `length_a` and `length_b` are the lengths of the two legs of a right triangle (the legs that form the triangle's right angle). Hint: the `math` module might have useful functions to use.
-
-For example:
-```
->>> pythagoreanTheorem(2, 2)
-2.8284271247461903
-```
-Present your source code and the output of three example runs.
 
 
 
@@ -32,9 +22,7 @@ Present your source code and the output of three example runs.
 
 
 
-
-
-
+## Problem 2
 **2. Write a function with the following signature:** `list_mangler(list_in)`.
 
 The function assumes that `list_in` is a list of integers, and returns a new list containing transformed elements of `list_in`. If the element is even, it's doubled. If the element is odd, it's tripled.
