@@ -1,5 +1,5 @@
 = HW 1
-Michael Partridge mcp292@nau.edu
+Michael Partridge <mcp292@nau.edu>
 8.27.20
 
 
