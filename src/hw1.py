@@ -1,12 +1,3 @@
-= HW 1
-Michael Partridge <mcp292@nau.edu>
-8.27.20
-
-== Problem 1
-
-.Source
-[source,python]
-----
 from math import hypot
 
 def pythagoreanTheorem(length_a, length_b):
@@ -16,12 +7,8 @@ def pythagoreanTheorem(length_a, length_b):
 print(pythagoreanTheorem(2, 2))
 print(pythagoreanTheorem(3, 2))
 print(pythagoreanTheorem(2, 4))
-----
 
-.Output
-[source,python]
-----
+
 2.8284271247461903
 3.6055512754639896
 4.47213595499958
-----
