@@ -145,7 +145,6 @@ def odd_even_filter(numbers):
 
 .Output
 ```py
-print("\nProblem 4")
 print(odd_even_filter([1, 2, 3, 4, 5, 6, 7, 8, 9]))
 print(odd_even_filter([3, 9, 43, 7]))
 print(odd_even_filter([71, 39, 98, 79, 5, 89, 50, 90, 2, 56]))
@@ -163,22 +162,21 @@ At first I had two loops
 even = []
 
 for num in numbers:
-if (num % 2 == 0):
-even.append(num)
+    if (num % 2 == 0):
+        even.append(num)
 
 # make list of all odd
 odd = []
 
 for num in numbers:
-if (num % 2 == 1):
-odd.append(num)
+    if (num % 2 == 1):
+        odd.append(num)
 ```
 
-But then I realized I could use the same loop with an else
+but then I realized I could use the same loop with an else.
 
-I also realized I could simplify this to one line
+I also realized I could simplify the return statement to one line
 ```py
-# store in output
 output = []
 output.append(even)
 output.append(odd)

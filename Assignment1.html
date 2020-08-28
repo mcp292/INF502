@@ -611,8 +611,7 @@ B</code></pre>
 <div class="listingblock">
 <div class="title">Output</div>
 <div class="content">
-<pre class="rouge highlight"><code data-lang="py"><span class="k">print</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">Problem 4"</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">odd_even_filter</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">]))</span>
+<pre class="rouge highlight"><code data-lang="py"><span class="k">print</span><span class="p">(</span><span class="n">odd_even_filter</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">]))</span>
 <span class="k">print</span><span class="p">(</span><span class="n">odd_even_filter</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">43</span><span class="p">,</span> <span class="mi">7</span><span class="p">]))</span>
 <span class="k">print</span><span class="p">(</span><span class="n">odd_even_filter</span><span class="p">([</span><span class="mi">71</span><span class="p">,</span> <span class="mi">39</span><span class="p">,</span> <span class="mi">98</span><span class="p">,</span> <span class="mi">79</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">89</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">56</span><span class="p">]))</span></code></pre>
 </div>
@@ -634,27 +633,26 @@ B</code></pre>
 </span><span class="n">even</span> <span class="o">=</span> <span class="p">[]</span>
 
 <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">numbers</span><span class="p">:</span>
-<span class="k">if</span> <span class="p">(</span><span class="n">num</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
-<span class="n">even</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">num</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="n">even</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
 
 <span class="c1"># make list of all odd
 </span><span class="n">odd</span> <span class="o">=</span> <span class="p">[]</span>
 
 <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">numbers</span><span class="p">:</span>
-<span class="k">if</span> <span class="p">(</span><span class="n">num</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
-<span class="n">odd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">num</span><span class="p">)</span></code></pre>
+    <span class="k">if</span> <span class="p">(</span><span class="n">num</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">odd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">num</span><span class="p">)</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>But then I realized I could use the same loop with an else</p>
+<p>but then I realized I could use the same loop with an else.</p>
 </div>
 <div class="paragraph">
-<p>I also realized I could simplify this to one line</p>
+<p>I also realized I could simplify the return statement to one line</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="py"><span class="c1"># store in output
-</span><span class="n">output</span> <span class="o">=</span> <span class="p">[]</span>
+<pre class="rouge highlight"><code data-lang="py"><span class="n">output</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">even</span><span class="p">)</span>
 <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">odd</span><span class="p">)</span>
 
@@ -666,7 +664,7 @@ B</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-08-28 09:08:06 -0700
+Last updated 2020-08-28 09:27:30 -0700
 </div>
 </div>
 <style>
