@@ -21,7 +21,7 @@ print(pythagoreanTheorem(3, 2))
 print(pythagoreanTheorem(2, 4))
 ----
 
-.Output (it also supports https://asciidoctor.org/docs/asciidoc-vs-markdown/#comparison-by-example[some] mardown syntax (`+```+`))
+.Output (it also supports https://asciidoctor.org/docs/asciidoc-vs-markdown/#comparison-by-example[some] markdown syntax (``++```++``))
 ```sh
 2.8284271247461903
 3.6055512754639896
