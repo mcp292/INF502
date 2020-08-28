@@ -1,7 +1,7 @@
 = HW 1
 Michael Partridge <mcp292@nau.edu>
 8.27.20
-:source-highlighter: highlight.js
+:source-highlighter: rouge
 
 == Problem 1
 
@@ -60,3 +60,65 @@ print(list_mangler([9, 10, 11, 110, 111]))
 [15, 12, 21, 16]
 [27, 20, 33, 220, 333]
 ----
+
+.Explanation
+A number is even if it's divisible by 2, odd otherwise.
+
+[Alternative way](https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions) is interesting but hurts my head.
+[source,python]
+squares = [x**2 for x in range(10)]
+
+== Problem 3
+
+.Source
+[source,python]
+----
+from statistics import mean
+
+def grade_calc(grades_in, to_drop):
+    # leave original list unmodified
+    grades_out = grades_in.copy()
+    
+    # sort and drop lowest `to_drop`
+    grades_out.sort()
+    
+    for iter in range(to_drop):
+        grades_out.pop(0)
+
+    # calc avg of modified list
+    avg = mean(grades_out)
+    
+    # give letter grade 
+    if (100 >= avg >= 90):
+        return 'A'
+    
+    elif (89 >= avg >= 80):
+        return 'B'
+
+    elif (79 >= avg >= 70):
+        return 'C'
+
+    elif (69 >= avg >= 60):
+        return 'D'
+
+    else:
+        return 'F'
+----
+
+.Output
+[source,python]
+----   
+print(grade_calc([100, 90, 80, 95], 2))
+print(grade_calc([0, 90, 80, 95], 2))
+print(grade_calc([70, 100, 60, 50], 2))
+----
+
+[source,shell]
+----
+A
+A
+B
+----
+
+.Explanation
+I broke the problem up by commenting out what it needs to do. Then I filled in the code. The comments remain. I used the `sort()` function and the pop function to remove the lowest. I made a copy of the list before doing so.

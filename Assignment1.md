@@ -23,18 +23,6 @@ Hey Igor! I've been playing with [Asciidoctor](https://asciidoctor.org/) lately.
 
 
 ## Problem 2
-**2. Write a function with the following signature:** `list_mangler(list_in)`.
-
-The function assumes that `list_in` is a list of integers, and returns a new list containing transformed elements of `list_in`. If the element is even, it's doubled. If the element is odd, it's tripled.
-
-For example:
-
-```
->>> list_mangler([1, 2, 3, 4])
-[3, 4, 9, 8]
-```
-
-Present a short (no more than a couple of sentences) description of your solution approach. Show your source code and the output of three example runs.
 
 **3. Write a function with the following signature:** `grade_calc(grades_in, to_drop)`.
 
