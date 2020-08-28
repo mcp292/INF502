@@ -3,7 +3,7 @@ Michael Partridge <mcp292@nau.edu>
 8.27.20
 :source-highlighter: rouge
 
-Hey Igor! I've been playing with https://asciidoctor.org/[Asciidoctor] lately. GitHub supports it (but not fully). I'm not sure any of the features are useful for this task, but it's been awesome to use to create pdfs. I've even been using it for really simple slide shows. All through emacs! No more dragging, aligning, changing font sizes. The beauty is that you can type all your documents in markup, and can output to https://asciidoctor.org/[PDF] or https://asciidoctor.org/[HTML] with really nice defaults (linked to output). The https://asciidoctor.org/docs/asciidoc-syntax-quick-reference/[Quick Reference] shows the syntax. I've really been geeking out over it lately! Back to the HW!
+Hey Igor! I've been playing with https://asciidoctor.org/[Asciidoctor] lately. GitHub supports it (but not fully). I'm not sure any of the features are useful for this task, but it's been awesome to use to create pdfs. I've even been using it for really simple slide shows. All through emacs! No more dragging, aligning, changing font sizes. The beauty is that you can type all your documents in markup, and can output to https://github.com/mcp292/INF502/blob/master/Assignment1.pdf[PDF] or https://htmlpreview.github.io/https://github.com/mcp292/INF502/blob/master/Assignment1.html[HTML] with really nice defaults (linked to output). The https://asciidoctor.org/docs/asciidoc-syntax-quick-reference/[Quick Reference] shows the syntax. I've really been geeking out over it lately! Back to the HW!
 
 == Problem 1
 
