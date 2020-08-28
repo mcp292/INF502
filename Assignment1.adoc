@@ -7,7 +7,7 @@ Hey Igor! I've been playing with https://asciidoctor.org/[Asciidoctor] lately. G
 
 == Problem 1
 
-.Source
+.Source (notice how this title renders in https://github.com/mcp292/INF502/blob/master/Assignment1.pdf[PDF] and https://htmlpreview.github.io/?https://github.com/mcp292/INF502/blob/master/Assignment1.html[HTML])
 [source,python]
 ----
 from math import hypot
@@ -21,13 +21,12 @@ print(pythagoreanTheorem(3, 2))
 print(pythagoreanTheorem(2, 4))
 ----
 
-.Output
-[source,shell]
-----
+.Output (it also supports https://asciidoctor.org/docs/asciidoc-vs-markdown/#comparison-by-example[some] mardown syntax (`````))
+```sh
 2.8284271247461903
 3.6055512754639896
 4.47213595499958
-----
+```
 
 == Problem 2
 
@@ -124,3 +123,65 @@ B
 
 .Explanation
 I broke the problem up by commenting out what it needs to do. Then I filled in the code. The comments remain. I used the `sort()` function and the `pop()` function to remove the lowest. I made a copy of the list before doing so.
+
+== Problem 4
+
+.Source
+```py
+def odd_even_filter(numbers):
+    # separate odd and even
+    even = []
+    odd = []
+
+    for num in numbers:
+        if (num % 2 == 0):
+            even.append(num)
+            
+        else:
+            odd.append(num)
+
+    return [even, odd]
+```
+
+.Output
+```py
+print("\nProblem 4")
+print(odd_even_filter([1, 2, 3, 4, 5, 6, 7, 8, 9]))
+print(odd_even_filter([3, 9, 43, 7]))
+print(odd_even_filter([71, 39, 98, 79, 5, 89, 50, 90, 2, 56]))
+```
+```sh
+[[2, 4, 6, 8], [1, 3, 5, 7, 9]]
+[[], [3, 9, 43, 7]]
+[[98, 50, 90, 2, 56], [71, 39, 79, 5, 89]]
+```
+
+.Explanation
+At first I had two loops
+```py
+# make list of all even
+even = []
+
+for num in numbers:
+if (num % 2 == 0):
+even.append(num)
+
+# make list of all odd
+odd = []
+
+for num in numbers:
+if (num % 2 == 1):
+odd.append(num)
+```
+
+But then I realized I could use the same loop with an else
+
+I also realized I could simplify this to one line
+```py
+# store in output
+output = []
+output.append(even)
+output.append(odd)
+
+return output
+```    

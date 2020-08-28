@@ -1,6 +1,6 @@
+# Problem 1
 from math import hypot
 
-# Problem 1
 def pythagoreanTheorem(length_a, length_b):
     return hypot(length_a, length_b)
 
@@ -31,21 +31,8 @@ print(list_mangler([1, 2, 3, 4]))
 print(list_mangler([5, 6, 7, 8]))
 print(list_mangler([9, 10, 11, 110, 111]))
 
-'''
-**3. Write a function with the following signature:** `grade_calc(grades_in, to_drop)`.
 
-The function accepts a list `grades_in` containing integer grades, drops the `to_drop` lowest grades (so, for to_drop equal to 2, the function should drop the 2 lowest grades), calculates the average of the grades left, and returns the letter grade this average corresponds to according to the letter grade scale for this course.
-
-For example:
-
-```
->>> grade_calc([100, 90, 80, 95], 2)
-'A'
-```
-
-Present a short (no more than a couple of sentences) description of your solution approach. Then show your source code and the  output of three example runs.
-'''
-
+# Problem 3
 from statistics import mean
 
 def grade_calc(grades_in, to_drop):
@@ -82,3 +69,25 @@ print("\nProblem 3")
 print(grade_calc([100, 90, 80, 95], 2))
 print(grade_calc([0, 90, 80, 95], 2))
 print(grade_calc([70, 100, 60, 50], 2))
+
+
+# Problem 4
+def odd_even_filter(numbers):
+    # separate odd and even
+    even = []
+    odd = []
+
+    for num in numbers:
+        if (num % 2 == 0):
+            even.append(num)
+            
+        else:
+            odd.append(num)
+
+    return [even, odd]
+
+
+print("\nProblem 4")
+print(odd_even_filter([1, 2, 3, 4, 5, 6, 7, 8, 9]))
+print(odd_even_filter([3, 9, 43, 7]))
+print(odd_even_filter([71, 39, 98, 79, 5, 89, 50, 90, 2, 56]))
