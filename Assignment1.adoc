@@ -3,6 +3,8 @@ Michael Partridge <mcp292@nau.edu>
 8.27.20
 :source-highlighter: rouge
 
+Hey Igor! I've been playing with https://asciidoctor.org/[Asciidoctor] lately. GitHub supports it (but not fully). I'm not sure any of the features are useful for this task, but it's been awesome to use to create pdfs. I've even been using it for really simple slide shows. All through emacs! No more dragging, aligning, changing font sizes. The beauty is that you can type all your documents in markup, and can output to [PDF] or [HTML] with really nice defaults (linked to output). The https://asciidoctor.org/docs/asciidoc-syntax-quick-reference/[Quick Reference] shows the syntax. I've really been geeking out over it lately! Back to the HW!
+
 == Problem 1
 
 .Source
@@ -64,7 +66,7 @@ print(list_mangler([9, 10, 11, 110, 111]))
 .Explanation
 A number is even if it's divisible by 2, odd otherwise.
 
-[Alternative way](https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions) is interesting but hurts my head.
+.https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions[Alternative way] is interesting but hurts my head
 [source,python]
 squares = [x**2 for x in range(10)]
 
@@ -121,4 +123,4 @@ B
 ----
 
 .Explanation
-I broke the problem up by commenting out what it needs to do. Then I filled in the code. The comments remain. I used the `sort()` function and the pop function to remove the lowest. I made a copy of the list before doing so.
+I broke the problem up by commenting out what it needs to do. Then I filled in the code. The comments remain. I used the `sort()` function and the `pop()` function to remove the lowest. I made a copy of the list before doing so.
