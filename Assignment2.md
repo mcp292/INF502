@@ -98,7 +98,7 @@ git commit -av
 5. Pull request. This is where I had issues. I couldn't find any good docs on it. 
 I found githubs docs messy and disorganized. It had me follow bunch of links to 
 what seemed to be unfinished documents. Conceptually I understand a pull request. 
-I'm telling you hey I mad a change, pull it down. But when I went to your repo to 
+I'm telling you "hey I made a change, pull it down". But when I went to your repo to 
 initiate it, I could not proceed. I hit the Slack and Tosin mentioned I had to be 
 in my own repo. It worked. Not that intuitive but I'm still thinking it through. 
 I would think I go to your repo to make the request but I guess it's simpler this way.
