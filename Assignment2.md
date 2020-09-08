@@ -31,6 +31,7 @@ represent the content you need to fill and post on your private repository
 
 
 **1. Describe what is the output of the following commands**
+
     -  `git branch` 
     -  `git checkout BRANCH_NAME` (USE THE NAME OF AN EXISTING BRANCH)
     -  `git log --decorate`
@@ -128,10 +129,13 @@ The goal of this assignment is to put you in touch with the fork-pullrequest pro
 
 4. Report your experience of making this submission, including the steps followed, commands used, and hurdles faced (within the file you created for the **Part 1**.
 ```
+1. Fork repo through the web UI.
 
+2. Clone repo in terminal.
 
+3. Make file according to spec in students/
+
+4. Commit and push changes.
+
+5. Pull request. This is where I had issues. I couldn't find any good docs on it. I found githubs docs messy and disorganized. It had me follow bunch of links to what seemed to be unfinished documents. Conceptually I understand a pull request. I'm telling you hey I mad a change, pull it down. But when I went to your repo to initiate it, I could not proceed. I hit the Slack and Tosin mentioned I had to be in my own repo. It worked. Not that intuitive but I'm still thinking it through. I would think I go to your repo to make the request but I guess it's simpler this way.
 ```
-
-
-
-
