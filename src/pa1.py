@@ -18,9 +18,12 @@
 
 # Important: the sequences must have the same length.
 
+# Might need to shift both! dam. Then check high score and config?
+
+# How to keep track of highest config above
 # ----
 
-def prompt_user():
+def prompt_user_shifts():
     global MAX_SHIFTS
 
     shifts = input("Enter max number of shifts to test (no entry = default, default = 5): ")
@@ -32,81 +35,111 @@ def prompt_user():
     return int(shifts)
 
 
-def compare_seq(this_seq, that_seq, shifts):
+def prompt_user_first_seq():
+    # TODO: error check
+    # TODO: should I make boolean and one func?
+    return int(input("First sequence (1-5): "))
+
+
+def prompt_user_second_seq():
+    return int(input("Second sequence (1-5): "))
+
+
+def compare_seq(first_seq, second_seq, shifts):
 # TODO: refactor to big while loop
 # TODO: check if same size or throw execption (pass to func)
-    
+# TODO: bring in here so I can call shift first
+
+
+    # shift first
     # inclusive
     for shift in range(shifts + 1):
         score = 0
         ind = 0
         
-        while ind + shift < len(this_seq):
-            if (this_seq[ind] == that_seq[ind + shift]):
-                # diagnostic
-                print(this_seq[ind], that_seq[ind + shift], score, range(len(this_seq)), this_seq[9])
-                # diagnostic
-                
+        while ind + shift < len(first_seq):
+            if (first_seq[ind] == second_seq[ind + shift]):            
                 score += 1
 
             # update
             ind += 1
 
-        print(score)        
-            
+        print_result(first_seq, second_seq, True, shift, score)
 
-
-        for ind in range(len(this_seq)):
-            if (this_seq[ind + shift] == that_seq[ind]):
-                print(this_seq[ind + shift], that_seq[ind], score, range(len(this_seq)), this_seq[9])
+    # shift second
+    # inclusive
+    for shift in range(shifts + 1):
+        score = 0
+        ind = 0
+        
+        while ind + shift < len(first_seq):
+            if (first_seq[ind + shift] == second_seq[ind]):
                 score += 1
 
-        print(score)        
+            # update
+            ind += 1
 
-    
+        print_result(first_seq, second_seq, False, shift, score)
+        
+        
+def print_result(first_seq, second_seq, shift_first, shifts, score):
+    shift_str = build_shift_str(shifts)
+
+    # create title and insert spacers
+    if (shift_first):
+        title = "Shifting first sequence by {}".format(shifts)
+
+        first_seq = shift_str + first_seq
+        second_seq = second_seq + shift_str
+    else:
+        title = "Shifting second sequence by {}".format(shifts)
+        first_seq = first_seq + shift_str
+        second_seq = shift_str + second_seq
+
+    print(title)
+    print("Shifts          : {}".format(shifts))
+    print("First Sequence  : {}".format(first_seq))
+    print("Second Sequence : {}".format(second_seq))
+    print("Score           : {}".format(score))
+    print("-")
+    print()
+
+def build_shift_str(shifts):
+    output = ""
+
+    for shift in range(shifts):
+        output += '-'
+
+    return output
+
+        
+# ----
 
 
 # main()
 VALID_CHARS = "AGCT"            # check if .upper() in string
-
 MAX_SHIFTS = 5
 
-# upload from file
-f_seq1 = open("../pa1_input/seq1.txt", "r")
-f_seq2 = open("../pa1_input/seq2.txt", "r")
-f_seq3 = open("../pa1_input/seq3.txt", "r")
-f_seq4 = open("../pa1_input/seq4.txt", "r")
-f_seq5 = open("../pa1_input/seq5.txt", "r")
-
-seq1 = f_seq1.read().strip()
-seq2 = f_seq2.read().strip()
-seq3 = f_seq3.read().strip()
-seq4 = f_seq4.read().strip()
-seq5 = f_seq5.read().strip()
-
 # prompt user for shifts
-shifts = prompt_user()
+shifts = prompt_user_shifts()
 
-#print(shifts)
+# prompt user for filenames
+fn_first_seq = "../pa1_input/seq{}.txt".format(prompt_user_first_seq())
+fn_second_seq = "../pa1_input/seq{}.txt".format(prompt_user_second_seq())
+print()
+
+# upload files
+# open
+f_first_seq = open(fn_first_seq, "r")
+f_second_seq = open(fn_second_seq, "r")
+
+# read
+first_seq = f_first_seq.read().strip()
+second_seq = f_second_seq.read().strip()
 
 # compare sequences and print results
-compare_seq(shifts)
-
-
-
-
-
-# Run comparison and show each combo
-# Shifts :
-# Seq 1  :
-# Seq 2  :
-# Score  : 
-
-# pretty print include dashes
+compare_seq(first_seq, second_seq, shifts)
 
 # close files
-f_seq1.close()
-f_seq2.close()
-f_seq3.close()
-f_seq4.close()
-f_seq5.close()
+f_first_seq.close()
+f_second_seq.close()
