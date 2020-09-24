@@ -18,10 +18,16 @@
 
 # Important: the sequences must have the same length.
 
-# Might need to shift both! dam. Then check high score and config?
 
-# How to keep track of highest config above
 # ----
+# all in one file for easier grading
+
+# using class like c struct
+class seq_c:
+    seq_name = None
+    seq_num = None
+    seq = None
+
 
 def prompt_user_shifts():
     global MAX_SHIFTS
@@ -36,8 +42,8 @@ def prompt_user_shifts():
 
 
 def prompt_user_first_seq():
-    # TODO: error check
-    # TODO: should I make boolean and one func?
+    # TODO: in C I would have one prompt function and pass in pointers,
+    # how do I do this in python?
     return int(input("First sequence (1-5): "))
 
 
@@ -45,11 +51,15 @@ def prompt_user_second_seq():
     return int(input("Second sequence (1-5): "))
 
 
-def compare_seq(first_seq, second_seq, shifts):
-# TODO: refactor to big while loop
-# TODO: check if same size or throw execption (pass to func)
-# TODO: bring in here so I can call shift first
+def prompt_user_seq(seq_c):
+    seq_c.seq_num = int(input("{} sequence (1-5): ".format(seq_c.seq_name)))
+    
 
+def compare_seq(first_seq, second_seq, shifts):
+    # TODO: only print max shift,
+    # can have max list and only run prints and scores on those mixes
+    
+    check_len(first_seq, second_seq)  # chicken?
 
     # shift first
     # inclusive
@@ -81,7 +91,13 @@ def compare_seq(first_seq, second_seq, shifts):
 
         print_result(first_seq, second_seq, False, shift, score)
         
-        
+
+def check_len(first_seq, second_seq):
+    if (len(first_seq) != len(second_seq)):
+        print("Lengths do not match!\n\nTerminating program...\n")
+        exit()
+
+
 def print_result(first_seq, second_seq, shift_first, shifts, score):
     shift_str = build_shift_str(shifts)
 
@@ -120,25 +136,41 @@ def build_shift_str(shifts):
 VALID_CHARS = "AGCT"            # check if .upper() in string
 MAX_SHIFTS = 5
 
+# "allocate struct"
+first_seq = seq_c()
+second_seq = seq_c()
+
+first_seq.name = "First"
+second_seq.name = "Second"
+
 # prompt user for shifts
 shifts = prompt_user_shifts()
 
 # prompt user for filenames
-fn_first_seq = "../pa1_input/seq{}.txt".format(prompt_user_first_seq())
-fn_second_seq = "../pa1_input/seq{}.txt".format(prompt_user_second_seq())
+prompt_user_seq(first_seq)
+prompt_user_seq(second_seq)
+
+# TODO: consider making file stuff another struct
+# create filenames from user input
+fn_first_seq = "../pa1_input/seq{}.txt".format(first_seq.seq_num)
+fn_second_seq = "../pa1_input/seq{}.txt".format(second_seq.seq_num)
 print()
 
 # upload files
 # open
-f_first_seq = open(fn_first_seq, "r")
-f_second_seq = open(fn_second_seq, "r")
-
+try:
+    f_first_seq = open(fn_first_seq, "r")
+    f_second_seq = open(fn_second_seq, "r")
+except FileNotFoundError:
+    print("Invalid sequence (file not found)!\n\nTerminating program...\n")
+    exit()
+    
 # read
-first_seq = f_first_seq.read().strip()
-second_seq = f_second_seq.read().strip()
+first_seq.seq = f_first_seq.read().strip()
+second_seq.seq = f_second_seq.read().strip()
 
 # compare sequences and print results
-compare_seq(first_seq, second_seq, shifts)
+compare_seq(first_seq.seq, second_seq.seq, shifts)
 
 # close files
 f_first_seq.close()
