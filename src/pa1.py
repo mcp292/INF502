@@ -20,12 +20,13 @@
 
 
 # ----
+
 # all in one file for easier grading
 
 # using class like c struct
 class seq_c:
-    seq_name = None
-    seq_num = None
+    name = None
+    num = None
     seq = None
 
 
@@ -41,6 +42,7 @@ def prompt_user_shifts():
     return int(shifts)
 
 
+# TODO: remove
 def prompt_user_first_seq():
     # TODO: in C I would have one prompt function and pass in pointers,
     # how do I do this in python?
@@ -52,7 +54,7 @@ def prompt_user_second_seq():
 
 
 def prompt_user_seq(seq_c):
-    seq_c.seq_num = int(input("{} sequence (1-5): ".format(seq_c.seq_name)))
+    seq_c.num = int(input("{} sequence (1-5): ".format(seq_c.name)))
     
 
 def compare_seq(first_seq, second_seq, shifts):
@@ -67,8 +69,8 @@ def compare_seq(first_seq, second_seq, shifts):
         score = 0
         ind = 0
         
-        while ind + shift < len(first_seq):
-            if (first_seq[ind] == second_seq[ind + shift]):            
+        while ind + shift < len(first_seq.seq):
+            if (first_seq.seq[ind] == second_seq.seq[ind + shift]):            
                 score += 1
 
             # update
@@ -82,8 +84,8 @@ def compare_seq(first_seq, second_seq, shifts):
         score = 0
         ind = 0
         
-        while ind + shift < len(first_seq):
-            if (first_seq[ind + shift] == second_seq[ind]):
+        while ind + shift < len(first_seq.seq):
+            if (first_seq.seq[ind + shift] == second_seq.seq[ind]):
                 score += 1
 
             # update
@@ -93,7 +95,7 @@ def compare_seq(first_seq, second_seq, shifts):
         
 
 def check_len(first_seq, second_seq):
-    if (len(first_seq) != len(second_seq)):
+    if (len(first_seq.seq) != len(second_seq.seq)):
         print("Lengths do not match!\n\nTerminating program...\n")
         exit()
 
@@ -105,17 +107,17 @@ def print_result(first_seq, second_seq, shift_first, shifts, score):
     if (shift_first):
         title = "Shifting first sequence by {}".format(shifts)
 
-        first_seq = shift_str + first_seq
-        second_seq = second_seq + shift_str
+        first_output_str = shift_str + first_seq.seq
+        second_output_str = second_seq.seq + shift_str
     else:
         title = "Shifting second sequence by {}".format(shifts)
-        first_seq = first_seq + shift_str
-        second_seq = shift_str + second_seq
+        first_output_str = first_seq.seq + shift_str
+        second_output_str = shift_str + second_seq.seq
 
     print(title)
     print("Shifts          : {}".format(shifts))
-    print("First Sequence  : {}".format(first_seq))
-    print("Second Sequence : {}".format(second_seq))
+    print("First Sequence  : {}".format(first_output_str))
+    print("Second Sequence : {}".format(second_output_str))
     print("Score           : {}".format(score))
     print("-")
     print()
@@ -152,8 +154,8 @@ prompt_user_seq(second_seq)
 
 # TODO: consider making file stuff another struct
 # create filenames from user input
-fn_first_seq = "../pa1_input/seq{}.txt".format(first_seq.seq_num)
-fn_second_seq = "../pa1_input/seq{}.txt".format(second_seq.seq_num)
+fn_first_seq = "../pa1_input/seq{}.txt".format(first_seq.num)
+fn_second_seq = "../pa1_input/seq{}.txt".format(second_seq.num)
 print()
 
 # upload files
@@ -170,7 +172,7 @@ first_seq.seq = f_first_seq.read().strip()
 second_seq.seq = f_second_seq.read().strip()
 
 # compare sequences and print results
-compare_seq(first_seq.seq, second_seq.seq, shifts)
+compare_seq(first_seq, second_seq, shifts)
 
 # close files
 f_first_seq.close()
