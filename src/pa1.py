@@ -24,75 +24,97 @@
 # all in one file for easier grading
 
 # using class like c struct
-class seq_c:
+class Seq:
     name = None
     num = None
     seq = None
 
 
-def prompt_user_shifts():
-    global MAX_SHIFTS
+# used to store config that gives highest score    
+class MaxScoreConfig:
+    first_seq = None
+    second_seq = None
+    shift_first = None
+    num_shifts = None
+    score = None
 
-    shifts = input("Enter max number of shifts to test (no entry = default, default = 5): ")
+    def __init__(self):
+        self.score = 0
 
-    # check for default
-    if (shifts == ''):
-        shifts = MAX_SHIFTS
-
-    return int(shifts)
-
-
-# TODO: remove
-def prompt_user_first_seq():
-    # TODO: in C I would have one prompt function and pass in pointers,
-    # how do I do this in python?
-    return int(input("First sequence (1-5): "))
-
-
-def prompt_user_second_seq():
-    return int(input("Second sequence (1-5): "))
-
-
-def prompt_user_seq(seq_c):
-    seq_c.num = int(input("{} sequence (1-5): ".format(seq_c.name)))
+        
+    def update(self, first_seq, second_seq, shift_first, num_shifts, score):
+        self.first_seq = first_seq
+        self.second_seq = second_seq
+        self.shift_first = shift_first
+        self.num_shifts = num_shifts
+        self.score = score
     
 
-def compare_seq(first_seq, second_seq, shifts):
-    # TODO: only print max shift,
-    # can have max list and only run prints and scores on those mixes
+def prompt_user_max_shifts():
+    global DEFAULT_MAX_SHIFTS
+
+    max_shifts = input("Enter max number of shifts to test (no entry = default, default = 5): ")
+
+    # check for default
+    if (max_shifts == ''):
+        max_shifts = DEFAULT_MAX_SHIFTS
+
+    return int(max_shifts)
+
+
+def prompt_user_seq(Seq):
+    Seq.num = int(input("{} sequence (1-5): ".format(Seq.name)))
+    
+
+def compare_seq(first_seq, second_seq, max_shifts):
+    max_score_config = MaxScoreConfig()
     
     check_len(first_seq, second_seq)  # chicken?
 
     # shift first
+    shift_first = True
+    
     # inclusive
-    for shift in range(shifts + 1):
+    for num_shifts in range(max_shifts + 1):
         score = 0
         ind = 0
         
-        while ind + shift < len(first_seq.seq):
-            if (first_seq.seq[ind] == second_seq.seq[ind + shift]):            
+        while ind + num_shifts < len(first_seq.seq):
+            if (first_seq.seq[ind] == second_seq.seq[ind + num_shifts]):            
                 score += 1
+
+                # update max score config
+                if (score > max_score_config.score):
+                    max_score_config.update(first_seq, second_seq, shift_first,
+                                          num_shifts, score)
 
             # update
             ind += 1
 
-        print_result(first_seq, second_seq, True, shift, score)
+#        print_result(first_seq, second_seq, True, num_shifts, score)
 
     # shift second
+    shift_first = False
+
     # inclusive
-    for shift in range(shifts + 1):
+    for num_shifts in range(max_shifts + 1):
         score = 0
         ind = 0
         
-        while ind + shift < len(first_seq.seq):
-            if (first_seq.seq[ind + shift] == second_seq.seq[ind]):
+        while ind + num_shifts < len(first_seq.seq):
+            if (first_seq.seq[ind + num_shifts] == second_seq.seq[ind]):
                 score += 1
+
+                # update max score config
+                if (score > max_score_config.score):
+                    max_score_config.update(first_seq, second_seq, shift_first,
+                                          num_shifts, score)
 
             # update
             ind += 1
 
-        print_result(first_seq, second_seq, False, shift, score)
-        
+    print_result(max_score_config)
+
 
 def check_len(first_seq, second_seq):
     if (len(first_seq.seq) != len(second_seq.seq)):
@@ -100,32 +122,58 @@ def check_len(first_seq, second_seq):
         exit()
 
 
-def print_result(first_seq, second_seq, shift_first, shifts, score):
-    shift_str = build_shift_str(shifts)
+def print_result(first_seq, second_seq, shift_first, num_shifts, score):
+    shift_str = build_shift_str(num_shifts)
 
     # create title and insert spacers
     if (shift_first):
-        title = "Shifting first sequence by {}".format(shifts)
+        title = "Shifting first sequence by {}".format(num_shifts)
 
         first_output_str = shift_str + first_seq.seq
         second_output_str = second_seq.seq + shift_str
     else:
-        title = "Shifting second sequence by {}".format(shifts)
+        title = "Shifting second sequence by {}".format(num_shifts)
+
         first_output_str = first_seq.seq + shift_str
         second_output_str = shift_str + second_seq.seq
 
     print(title)
-    print("Shifts          : {}".format(shifts))
+    print("Shifts          : {}".format(num_shifts))
     print("First Sequence  : {}".format(first_output_str))
     print("Second Sequence : {}".format(second_output_str))
     print("Score           : {}".format(score))
     print("-")
     print()
 
-def build_shift_str(shifts):
+    
+def print_result(max_score_config):
+    shift_str = build_shift_str(max_score_config.num_shifts)
+
+    # create title and insert spacers
+    if (max_score_config.shift_first):
+        title = "Shifting first sequence by {}".format(max_score_config.num_shifts)
+
+        first_output_str = shift_str + max_score_config.first_seq.seq
+        second_output_str = max_score_config.second_seq.seq + shift_str
+    else:
+        title = "Shifting second sequence by {}".format(max_score_config.num_shifts)
+
+        first_output_str = max_score_config.first_seq.seq + shift_str
+        second_output_str = shift_str + max_score_config.second_seq.seq
+
+    print(title)
+    print("Shifts          : {}".format(max_score_config.num_shifts))
+    print("First Sequence  : {}".format(first_output_str))
+    print("Second Sequence : {}".format(second_output_str))
+    print("Score           : {}".format(max_score_config.score))
+    print("-")
+    print()
+
+    
+def build_shift_str(num_shifts):
     output = ""
 
-    for shift in range(shifts):
+    for shift in range(num_shifts):
         output += '-'
 
     return output
@@ -136,23 +184,22 @@ def build_shift_str(shifts):
 
 # main()
 VALID_CHARS = "AGCT"            # check if .upper() in string
-MAX_SHIFTS = 5
+DEFAULT_MAX_SHIFTS = 5
 
 # "allocate struct"
-first_seq = seq_c()
-second_seq = seq_c()
+first_seq = Seq()
+second_seq = Seq()
 
 first_seq.name = "First"
 second_seq.name = "Second"
 
 # prompt user for shifts
-shifts = prompt_user_shifts()
+max_shifts = prompt_user_max_shifts()
 
 # prompt user for filenames
 prompt_user_seq(first_seq)
 prompt_user_seq(second_seq)
 
-# TODO: consider making file stuff another struct
 # create filenames from user input
 fn_first_seq = "../pa1_input/seq{}.txt".format(first_seq.num)
 fn_second_seq = "../pa1_input/seq{}.txt".format(second_seq.num)
@@ -172,7 +219,7 @@ first_seq.seq = f_first_seq.read().strip()
 second_seq.seq = f_second_seq.read().strip()
 
 # compare sequences and print results
-compare_seq(first_seq, second_seq, shifts)
+compare_seq(first_seq, second_seq, max_shifts)
 
 # close files
 f_first_seq.close()
