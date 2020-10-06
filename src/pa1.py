@@ -18,6 +18,9 @@
 
 # Important: the sequences must have the same length.
 
+# TODO: try catch
+
+# TODO: go through abover
 
 # ----
 
@@ -50,6 +53,19 @@ class MaxScoreConfig:
         self.score = score
     
 
+def prompt_user_mode():
+    global DEFAULT_MODE
+
+    mode = input("Enter mode (0 = match, 1 = contiguous, default = match): ")
+
+    # check for default
+    if (mode == ''):
+        mode = DEFAULT_MODE
+
+
+    return int(mode)
+
+
 def prompt_user_max_shifts():
     global DEFAULT_MAX_SHIFTS
 
@@ -66,7 +82,8 @@ def prompt_user_seq(Seq):
     Seq.num = int(input("{} sequence (1-5): ".format(Seq.name)))
     
 
-def compare_seq(first_seq, second_seq, max_shifts):
+# TODO: break up both compares into into helper functions and reverse params
+def compare_seq_match(first_seq, second_seq, max_shifts):
     max_score_config = MaxScoreConfig()
     
     check_len(first_seq, second_seq)  # chicken?
@@ -91,8 +108,6 @@ def compare_seq(first_seq, second_seq, max_shifts):
             # update
             ind += 1
 
-#        print_result(first_seq, second_seq, True, num_shifts, score)
-
     # shift second
     shift_first = False
 
@@ -110,6 +125,60 @@ def compare_seq(first_seq, second_seq, max_shifts):
                     max_score_config.update(first_seq, second_seq, shift_first,
                                           num_shifts, score)
 
+            # update
+            ind += 1
+
+    print_result(max_score_config)
+
+
+def compare_seq_contig(first_seq, second_seq, max_shifts):
+    max_score_config = MaxScoreConfig()
+    
+    check_len(first_seq, second_seq)
+
+    # shift first
+    shift_first = True
+    
+    # inclusive
+    for num_shifts in range(max_shifts + 1):
+        score = 0
+        ind = 0
+        
+        while ind + num_shifts < len(first_seq.seq):
+            if (first_seq.seq[ind] == second_seq.seq[ind + num_shifts]):            
+                score += 1
+                
+                # update max score config
+                if (score > max_score_config.score):
+                    max_score_config.update(first_seq, second_seq, shift_first,
+                                          num_shifts, score)
+
+            else:
+                score = 0
+
+            # update
+            ind += 1
+
+    # shift second
+    shift_first = False
+    
+    # inclusive
+    for num_shifts in range(max_shifts + 1):
+        score = 0
+        ind = 0
+        
+        while ind + num_shifts < len(first_seq.seq):
+            if (first_seq.seq[ind + num_shifts] == second_seq.seq[ind]):
+                score += 1
+                
+                # update max score config
+                if (score > max_score_config.score):
+                    max_score_config.update(first_seq, second_seq, shift_first,
+                                          num_shifts, score)
+
+            else:
+                score = 0
+                
             # update
             ind += 1
 
@@ -186,12 +255,19 @@ def build_shift_str(num_shifts):
 VALID_CHARS = "AGCT"            # check if .upper() in string
 DEFAULT_MAX_SHIFTS = 5
 
+MODE_MATCH = 0
+MODE_CONTIG = 1
+DEFAULT_MODE = MODE_MATCH
+
 # "allocate struct"
 first_seq = Seq()
 second_seq = Seq()
 
 first_seq.name = "First"
 second_seq.name = "Second"
+
+# prompt user for mode 
+mode = prompt_user_mode()
 
 # prompt user for shifts
 max_shifts = prompt_user_max_shifts()
@@ -219,7 +295,12 @@ first_seq.seq = f_first_seq.read().strip()
 second_seq.seq = f_second_seq.read().strip()
 
 # compare sequences and print results
-compare_seq(first_seq, second_seq, max_shifts)
+if (mode == MODE_MATCH):
+    compare_seq_match(first_seq, second_seq, max_shifts)
+elif (mode == MODE_CONTIG):
+    compare_seq_contig(first_seq, second_seq, max_shifts)
+else:
+    print("Mode not recognized")        
 
 # close files
 f_first_seq.close()
