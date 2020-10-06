@@ -45,10 +45,11 @@ class Movie:
         self.year = year
         
     def add_genre(self, genre):
-        self.genre.append(genre)
+        self.genres.append(genre)
         
     def add_actor(self, actor):
-        self.actor.append(actor)
+        actor.add_movie(self)
+        self.actors.append(actor)
         
     def borrow_movie(self, borrowed_by):
         self.borrowed_by = borrowed_by
@@ -66,11 +67,15 @@ class Movie:
         for actor in self.actors:
             print("\t{}".format(actor.name))
 
-
+    def get_movies_with_actor(self, movies, actor):
+        for movie in movies:
+            
+        
 class Actor:
     name = ""
     date_of_birth = ""
     nationality = ""
+    movies = []
 
     def set_name(self, name):
         self.name = name
@@ -78,11 +83,31 @@ class Actor:
     def set_date_of_birth(self, date_of_birth):
         self.date_of_birth = date_of_birth
 
-        def set_nationality(self, nationality):
-            self.nationality = nationality
+    def set_nationality(self, nationality):
+        self.nationality = nationality
     
 # CHALLENGE: change your classes to make it possible to list (from an object
 # actor) all the movies that the actor participated.
 
 # I would make it take in a list of movies
 
+Movie(.... [actor1, actor2])
+
+init:
+    for actor in actors:
+        add_actor(actor)
+
+
+class Movie():
+    static int = 0;
+
+    init:
+       int++;
+
+
+movie1 = Movie()
+movie2 = Movie()
+
+movie2.int == 2
+
+    
