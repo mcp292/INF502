@@ -1,29 +1,3 @@
-# EXCEPTIONS
-# FNF
-# Invalid char
-# Invalid user input
-# Invalid length
-
-
-# TASKS
-# Number of matches: Your code must be able to calculate the maximum score and print the shifted strings in the output
-
-# Maximum chain: Your code must be able to calculate the size of the maximum contiguous chain that matches the sequences (score) and the sequences that resulted on that score (shifted)
-
-# User-input: Your program must collect from the user the following information: the maximum shift; the approach to be used (number of matches or maximum chain), the name of the input files (each sequence needs to be provided inside of a file)
-
-# File input: Your code must use file input to read the DNA sequences (one sequence per file)
-
-# Exception handling: Your code must handle all exception types raised, and do so by accounting for specific exception types (in other words, no except: or except Exception: clauses).
-
-# Important: the sequences must have the same length.
-
-# TODO: try catch
-
-# TODO: go through abover
-
-# ----
-
 # all in one file for easier grading
 
 # using class like c struct
@@ -247,10 +221,16 @@ def build_shift_str(num_shifts):
 
     return output
 
+
+def check_valid_chars(str):
+    global VALID_CHARS
+
+    for char in str:
+        if char not in VALID_CHARS:
+            print("Sequence contains invalid chars!\n\nTerminating program...\n")
+            exit()
+            
         
-# ----
-
-
 # main()
 VALID_CHARS = "AGCT"            # check if .upper() in string
 DEFAULT_MAX_SHIFTS = 5
@@ -266,15 +246,19 @@ second_seq = Seq()
 first_seq.name = "First"
 second_seq.name = "Second"
 
-# prompt user for mode 
-mode = prompt_user_mode()
+try:
+    # prompt user for mode 
+    mode = prompt_user_mode()
 
-# prompt user for shifts
-max_shifts = prompt_user_max_shifts()
+    # prompt user for shifts
+    max_shifts = prompt_user_max_shifts()
 
-# prompt user for filenames
-prompt_user_seq(first_seq)
-prompt_user_seq(second_seq)
+    # prompt user for filenames
+    prompt_user_seq(first_seq)
+    prompt_user_seq(second_seq)
+except ValueError:
+    print("Entry must be a number!\n\nTerminating program...\n")
+    exit()
 
 # create filenames from user input
 fn_first_seq = "../pa1_input/seq{}.txt".format(first_seq.num)
@@ -293,6 +277,10 @@ except FileNotFoundError:
 # read
 first_seq.seq = f_first_seq.read().strip()
 second_seq.seq = f_second_seq.read().strip()
+
+# check that sequences are valid
+check_valid_chars(first_seq.seq)
+check_valid_chars(second_seq.seq)
 
 # compare sequences and print results
 if (mode == MODE_MATCH):
