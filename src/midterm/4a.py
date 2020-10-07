@@ -1,14 +1,3 @@
-'''
-Create a function that receives the dictionary and the name of a mountain, and removes it (please treat the exception triggered when a mountain is not found)
-
-Create a function to list the top 2 mountains
-
-run each func and show result
-
-go back and add exceptions to each prob
-'''
-
-
 def print_data(dict):
     print("List data:")
 
