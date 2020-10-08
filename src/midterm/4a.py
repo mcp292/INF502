@@ -1,3 +1,12 @@
+''' 
+Approach: I manually entered the mountain data into a list (hardest part :),
+then decided to make functions for each of the tasks. Again, I took advantage 
+of python's built in functions and operators to remove the dictionary entry. 
+For getting the 2 largest, I used `max()` which amazingly works even on 
+dictionaries. I made a copy of the list, got max, deleted max, then got max
+again to get the largest 2.
+'''
+
 def print_data(dict):
     print("List data:")
 
