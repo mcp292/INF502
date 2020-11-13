@@ -36,17 +36,32 @@ class Repo:
         # TODO: loop through each pr and pass json to class
         # print("\nFOR\n\n")
 
+        # extract pull requests
         self.pull_requests = []
         
         for pull_request in pull_request_data:
             self.pull_requests.append(PullRequest(pull_request, user, repo))
-            break               # TODO remove 
-        # # Test igors TODO
-        # response = requests.get("https://api.github.com/search/issues?q=is:pr+repo:{}/{}".format(user, repo, 1))
-        # pull_request_data = response.json()
+            # break               # TODO remove 
 
-        # print("\n\nIGOR\n\n", self.format_json(pull_request_data))
+        # for each extracted pull request store author
+        self.authors = []
+        existing_author = None  # default
+        
+        for pull_request in self.pull_requests:
+            # check if author already added
+            for author in self.authors:
+                if (pull_request.user == author.user):
+                    existing_author = author
 
+            # if author exists increment num pull requests
+            if (existing_author != None):
+                existing_author.inc_num_pull_requests()
+            else:
+                # add to list
+                self.authors.append(Author(pull_request.user))
+
+            # reset to default
+            existing_author = None
 
         print()
         print(self.name)
@@ -58,6 +73,8 @@ class Repo:
         print(self.date_of_collection)
         print(self.num_stars)
         print(self.pull_requests_url)
+        print([str(item) for item in self.pull_requests])
+        print([str(item) for item in self.authors])
 
 
     def __str__(self):
@@ -92,7 +109,7 @@ class PullRequest:
         print("\n\nPR vars\n\n")
         print(self.title)
         print(self.number)
-        print(self.body)
+        # print(self.body)
         print(self.state)
         print(self.date_of_creation)
         print(self.user)               
@@ -104,6 +121,25 @@ class PullRequest:
         print(self.changed_files)
         # END print all
 
+        
+    def __str__(self):
+        return "{} ({})".format(self.title, self.state)
+
+        
+class Author:
+    def __init__(self, user):
+        self.user = user
+        self.num_pull_requests = 1
+
+
+    def inc_num_pull_requests(self):
+        self.num_pull_requests = self.num_pull_requests + 1
+
+
+    def __str__(self):
+        return "{}: {}".format(self.user, self.num_pull_requests)
+        
+        
 # # user data
 # response = requests.get("https://api.github.com/users/JabRef")
 # user_data = format_json(response.json())
