@@ -43,3 +43,4 @@ matplotlib.pyplot.show()
 # _10374456
 # https://stackoverflow.com/questions/38985053/pandas-groupby-and-sum-only-one-column
 # https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.groupby.html
+# https://stackoverflow.com/questions/34347145/pandas-plot-doesnt-show
