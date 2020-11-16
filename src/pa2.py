@@ -11,7 +11,9 @@ def format_json(data):
 
 class Repo:
     def __init__(self, user, repo):
-
+        username = 'mcp292'
+        token = ''
+        
         sesh = requests.Session()
         sesh.auth = (username, token)
 
@@ -30,27 +32,17 @@ class Repo:
         self.watchers = repo_data["watchers"]
         self.date_of_collection = date.today()
         self.num_stars = repo_data["stargazers_count"]
-               
 
         # get pull request data from first page (1)
         response = sesh.get("https://api.github.com/repos/{}/{}/pulls?page={}".format(user, repo, 1))
         #response = requests.get("https://api.github.com/repos/{}/{}/pulls?page={}".format(user, repo, 1))
         pull_request_data = response.json()
 
-        # print("\nPR\n\n", self.format_json(pull_request_data))
-
-        self.pull_requests_url = repo_data["pulls_url"]
-
-        # TODO: make nested class for pull requests and have a list of pull_requests classes here.
-        # TODO: loop through each pr and pass json to class
-        # print("\nFOR\n\n")
-
         # extract pull requests
         self.pull_requests = []
         
         for pull_request in pull_request_data:
             self.pull_requests.append(PullRequest(pull_request, user, repo))
-            # break               # TODO remove 
 
         # for each extracted pull request store author
         self.authors = []
@@ -71,9 +63,9 @@ class Repo:
 
             # reset to default
             existing_author = None
-
+        
         # write to csv
-        self.to_CSV("repos.csv")
+        self.write_to_csv(user, repo, self.pull_requests, self.authors)
         
         print()
         print(self.name)
@@ -84,10 +76,9 @@ class Repo:
         print(self.watchers)
         print(self.date_of_collection)
         print(self.num_stars)
-        print(self.pull_requests_url)
         print([str(item) for item in self.pull_requests])
         print([str(item) for item in self.authors])
-
+        
 
     def __str__(self):
         return "{}/{}: {} ({})".format(self.owner, self.name, self.description, self.num_stars)
@@ -96,7 +87,7 @@ class Repo:
     def to_CSV(self, filename):
         file_exist = os.path.exists(filename)
 
-        header = vars(self)
+        header = vars(self).copy() # was deleting from original class
 
         del header["pull_requests"]
         del header["authors"]
@@ -108,11 +99,31 @@ class Repo:
                 file_writer.writerow(header)
 
             file_writer.writerow(header.values())
+
             
+    def write_to_csv(self, user, repo, pull_requests, authors):
+        # create file names
+        repo_fn="repos.csv"
+        pull_req_fn = "{}-{}.csv".format(user, repo)
+        author_fn="user.csv"
+
+        # write repo data
+        self.to_CSV(repo_fn)
+
+        # write pr data
+        for req in pull_requests:
+            req.to_CSV(pull_req_fn)
+
+        # write author data
+        for author in authors:
+            author.to_CSV(author_fn)
+        
 
 class PullRequest:
     def __init__(self, pull_request, user, repo):
-
+        username = 'mcp292'
+        token = ''
+        
         sesh = requests.Session()
         sesh.auth = (username, token)
 
@@ -122,7 +133,7 @@ class PullRequest:
         self.state = pull_request["state"]
         self.date_of_creation = pull_request["created_at"]
         self.user = pull_request["user"]["login"]
-        self.closing_date = None # TODO: it's a print safety, remove?
+        self.closing_date = None
         
         if (self.state != "open"):
             self.closing_date = pull_request["closed_at"]
@@ -140,8 +151,8 @@ class PullRequest:
         self.changed_files = pull_request_data["changed_files"]
 
         # write to csv
-        filename = "{}-{}.csv".format(user, repo)
-        self.to_CSV(filename)
+        # filename = "{}-{}.csv".format(user, repo)
+        # self.to_CSV(filename)
 
         
         # TODO: print all
@@ -222,7 +233,7 @@ class Author:
             num_repos = num_repos.find("span", attrs={"class": "Counter"}) # find it! scrape it!
             self.num_repos = int(num_repos.text) + 1 # it's a counter so it starts at zero (add 1)
 
-            # get number contributions in last year TODO: not the right number
+            # get number contributions in last year 
             num_contributions = soup.find("div", attrs={"class": "js-yearly-contributions"}) # inside this block
             num_contributions = num_contributions.find("h2") # find it! scrape it!
             self.num_contributions = int("".join(filter(str.isdigit, num_contributions.text))) # get number from str
@@ -238,35 +249,19 @@ class Author:
 
     def __str__(self):
         return "{}: {}".format(self.user, self.num_pull_requests)
-        
-        
-# # user data
-# response = requests.get("https://api.github.com/users/JabRef")
-# user_data = format_json(response.json())
-
-# print("\nUSER:\n\n", user_data)
-
-# # repo data (also has user (owner) data)
-# response = requests.get("https://api.github.com/repos/JabRef/jabref")
-# repo_data = format_json(response.json())
-
-# print("\nREPO:\n\n", repo_data)
-
-# # OAuth
-# header = {'Authorization': 'token 6817b310ca5d3a54dc2ec483562b748264975c48'}
-# requests.post("https://api.github.com", headers=header)
-
-# # Check limit 
-# response = requests.get("https://api.github.com/users/mcp292")
-# print(format_json(response.json()))
-
-# 2 attempt
-
+            
 
 # Check limit
-# response = sesh.get("https://api.github.com/users/mcp292")
-# print(format_json(response.json()))
-# print(response.headers)
+username = 'mcp292'
+token = ''
 
-repo = Repo("JabRef", "jabref")
+sesh = requests.Session()
+sesh.auth = (username, token)
+
+response = sesh.get("https://api.github.com/users/{}".format(username))
+print(format_json(dict(response.headers)))
+
+
+
+# repo = Repo("JabRef", "jabref")
 
