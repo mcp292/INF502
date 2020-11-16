@@ -1,5 +1,7 @@
 import requests
 import json
+import csv
+import os
 from datetime import date
 from bs4 import BeautifulSoup as bs
 
@@ -70,6 +72,9 @@ class Repo:
             # reset to default
             existing_author = None
 
+        # write to csv
+        self.to_CSV("repos.csv")
+        
         print()
         print(self.name)
         print(self.owner)
@@ -87,6 +92,23 @@ class Repo:
     def __str__(self):
         return "{}/{}: {} ({})".format(self.owner, self.name, self.description, self.num_stars)
 
+
+    def to_CSV(self, filename):
+        file_exist = os.path.exists(filename)
+
+        header = vars(self)
+
+        del header["pull_requests"]
+        del header["authors"]
+
+        with open(filename, mode='a', newline='') as CSVfile:
+            file_writer = csv.writer(CSVfile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            
+            if(not file_exist):
+                file_writer.writerow(header)
+
+            file_writer.writerow(header.values())
+            
 
 class PullRequest:
     def __init__(self, pull_request, user, repo):
@@ -117,6 +139,11 @@ class PullRequest:
         self.deletions = pull_request_data["deletions"]
         self.changed_files = pull_request_data["changed_files"]
 
+        # write to csv
+        filename = "{}-{}.csv".format(user, repo)
+        self.to_CSV(filename)
+
+        
         # TODO: print all
         print("\n\nPR vars\n\n")
         print(self.title)
@@ -134,10 +161,35 @@ class PullRequest:
         # END print all
 
         
+        
     def __str__(self):
         return "{} ({})".format(self.title, self.state)
 
+
+    def to_CSV(self, filename):
+        path= os.getcwd() + "/repos"
+
+        # if dir doesn't exist
+        if (not os.path.exists(path)):
+            try:
+                os.mkdir(path)
+            except OSError:
+                print ("Creation of the directory %s failed" % path)
+
+        # cd into dir
+        os.chdir(path)
+
+        file_exist = os.path.exists(filename)
         
+        with open(filename, mode='a', newline='') as CSVfile:
+            file_writer = csv.writer(CSVfile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            
+            if (not file_exist):
+                file_writer.writerow(vars(self))
+
+            file_writer.writerow(vars(self).values())
+            
+
 class Author:
     def __init__(self, user):
         self.user = user
