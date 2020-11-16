@@ -18,7 +18,7 @@ class Repo:
         sesh.auth = (username, token)
 
         response = sesh.get("https://api.github.com/repos/{}/{}".format(user, repo))
-        #        response = requests.get("https://api.github.com/repos/{}/{}".format(user, repo))
+        # response = requests.get("https://api.github.com/repos/{}/{}".format(user, repo))
         repo_data = response.json()
 
         # print(self.format_json(repo_data))
@@ -27,7 +27,7 @@ class Repo:
         self.owner = repo_data["owner"]["login"]
         self.description = repo_data["description"]
         self.homepage = repo_data["homepage"]
-        self.repo_license = repo_data["license"]["name"] # TODO: class?
+        self.repo_license = repo_data["license"]["name"] 
         self.num_forks = repo_data["forks_count"]
         self.watchers = repo_data["watchers"]
         self.date_of_collection = date.today()
@@ -35,7 +35,7 @@ class Repo:
 
         # get pull request data from first page (1)
         response = sesh.get("https://api.github.com/repos/{}/{}/pulls?page={}".format(user, repo, 1))
-        #response = requests.get("https://api.github.com/repos/{}/{}/pulls?page={}".format(user, repo, 1))
+        # response = requests.get("https://api.github.com/repos/{}/{}/pulls?page={}".format(user, repo, 1))
         pull_request_data = response.json()
 
         # extract pull requests
@@ -143,20 +143,13 @@ class PullRequest:
         #response = requests.get("https://api.github.com/repos/{}/{}/pulls/{}".format(user, repo, self.number))
         pull_request_data = response.json()
 
-        # print("\n\nADD PR DATA\n\n", format_json(pull_request_data))       
-            
         self.num_commits = pull_request_data["commits"]
         self.additions = pull_request_data["additions"]
         self.deletions = pull_request_data["deletions"]
         self.changed_files = pull_request_data["changed_files"]
-
-        # write to csv
-        # filename = "{}-{}.csv".format(user, repo)
-        # self.to_CSV(filename)
-
         
-        # TODO: print all
-        print("\n\nPR vars\n\n")
+        # print all
+        print()
         print(self.title)
         print(self.number)
         # print(self.body)
@@ -170,7 +163,6 @@ class PullRequest:
         print(self.deletions)
         print(self.changed_files)
         # END print all
-
         
         
     def __str__(self):
@@ -178,21 +170,22 @@ class PullRequest:
 
 
     def to_CSV(self, filename):
-        path= os.getcwd() + "/repos"
-
-        # if dir doesn't exist
-        if (not os.path.exists(path)):
-            try:
-                os.mkdir(path)
-            except OSError:
-                print ("Creation of the directory %s failed" % path)
-
-        # cd into dir
-        os.chdir(path)
-
-        file_exist = os.path.exists(filename)
+        directory = os.getcwd() + "/repos"
+        path = "{}/{}".format(directory, filename)
         
-        with open(filename, mode='a', newline='') as CSVfile:
+        # if dir doesn't exist
+        if (not os.path.exists(directory)):
+            try:
+                os.mkdir(directory)
+            except OSError:
+                print ("Creation of the directory %s failed" % directory)
+
+        # # cd into dir ~ TODO check
+        # os.chdir(path)
+
+        file_exist = os.path.exists(path)
+        
+        with open(path, mode='a', newline='') as CSVfile:
             file_writer = csv.writer(CSVfile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
             
             if (not file_exist):
@@ -208,7 +201,7 @@ class Author:
         # set defaults for pages that might not have this data
         self.num_followers = 0
         self.num_following = 0
-        
+        self.num_contributions = 0       
         
         # scrape user info from page
         response = requests.get("https://github.com/{}".format(user))        
@@ -251,17 +244,32 @@ class Author:
         return "{}: {}".format(self.user, self.num_pull_requests)
             
 
+    def to_CSV(self, filename):
+        file_exist = os.path.exists(filename)
+
+        header = vars(self).copy()
+
+        with open(filename, mode='a', newline='') as CSVfile:
+            file_writer = csv.writer(CSVfile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            
+            if(not file_exist):
+                file_writer.writerow(header)
+
+            file_writer.writerow(header.values())
+
+
 # Check limit
-username = 'mcp292'
-token = ''
+# username = 'mcp292'
+# token = ''
 
-sesh = requests.Session()
-sesh.auth = (username, token)
+# sesh = requests.Session()
+# sesh.auth = (username, token)
 
-response = sesh.get("https://api.github.com/users/{}".format(username))
-print(format_json(dict(response.headers)))
+# response = sesh.get("https://api.github.com/users/{}".format(username))
+# print(format_json(dict(response.headers)))
 
 
 
-# repo = Repo("JabRef", "jabref")
+repo = Repo("JabRef", "jabref")
+repo = Repo("git", "git")
 
