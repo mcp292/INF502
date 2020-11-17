@@ -226,14 +226,17 @@ class Repo:
 
             # for each extracted pull request store author
             print("Collecting user data...")
-
+            
             self.authors = []
             existing_author = None  # default
 
+            # add this author first (repo author)
+            self.authors.append(Author(user))
+            
             for pull_request in self.pull_requests:
                 # check if author already added
                 for author in self.authors:
-                    if (pull_request.user == author.user):
+                    if (author.user == pull_request.user):
                         existing_author = author
 
                 # if author exists increment num pull requests
@@ -382,6 +385,7 @@ class Author:
     def __init__(self, user):
         self.user = user
         self.num_pull_requests = 1
+
         # set defaults for pages that might not have this data
         self.num_followers = 0
         self.num_following = 0
