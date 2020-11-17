@@ -350,3 +350,1056 @@ Changes since v1:
   through the document.
 
 Signed-off-by: Takuya Noguchi <takninnovationresearch@gmail.com>",open,2020-03-02T14:27:36Z,tnir,,1,11,11,2
+"userdiff: php: Improved test cases used to catch ""abstract"" and ""final"" functions",915,"Since the original tests cases were using other detectable keywords (like ""public"" or ""protected""), they are able to pass even if the keywords intended to be covered are not present.
+In the case of the test for ""abstract"" keyword, the method's body was updated in the fixture, since PHP doesn't allow an abstract method to have a body.
+
+Signed-off-by: Javier Spagnoletti <phansys@gmail.com>
+
+cc: Johannes Sixt <j6t@kdbg.org>",open,2020-11-14T13:14:57Z,phansys,,1,5,2,2
+Add filter-branch.squelchWarning git config alongside FILTER_BRANCH_SQUELCH_WARNING,912,"In addition to the environment variable FILTER_BRANCH_SQUELCH_WARNING,
+the git config filter-branch.squelchWarning is checked to see if the
+usage warning should be squelched.
+
+Thanks for taking the time to contribute to Git! Please be advised that the
+Git community does not use github.com for their contributions. Instead, we use
+a mailing list (git@vger.kernel.org) for code submissions, code reviews, and
+bug reports. Nevertheless, you can use GitGitGadget (https://gitgitgadget.github.io/)
+to conveniently send your Pull Requests commits to our mailing list.
+
+Please read the ""guidelines for contributing"" linked above!
+",open,2020-11-10T11:14:54Z,dhoepfl,,1,8,2,1
+Simplified merge logic,911,"Thanks for taking the time to contribute to Git! Please be advised that the
+Git community does not use github.com for their contributions. Instead, we use
+a mailing list (git@vger.kernel.org) for code submissions, code reviews, and
+bug reports. Nevertheless, you can use GitGitGadget (https://gitgitgadget.github.io/)
+to conveniently send your Pull Requests commits to our mailing list.
+
+Please read the ""guidelines for contributing"" linked above!
+
+The logic for the merging is somewhat confusing. So I simplified it to be equivalent. I tested all my changes to ensure in practice they work.
+
+The first thing I did was test out which branch would occur for every possible value of 
+
+remoteheads->next | common->next | option_commit | Branch
+-- | -- | -- | --
+T | T | T | A
+T | T | F | A
+T | F | T | A
+T | F | F | A
+F | T | T | C
+F | T | F | C
+F | F | T | B
+F | F | F | A
+
+Using this truth table, I was able to deduce that if the second branch ran, the if statement for the first branch was false. Taking the inverse, it was then found many of the checks were redundant, so the if statement was rewritten to have each branch run under the same exact conditions, except each value is evaluated as little as possible.
+
+I hope you can approve of this and show me how to send it.
+
+Thank you.
+",open,2020-11-07T21:17:58Z,pi1024e,,1,38,44,1
+fix gcc 4.0 big endian sha1,907,"Currently, sha1.c is compiled in little endian mode when using gcc 4.0 on Mac OS X 10.4 PowerPC (which is big endian). This results in a build that always states there is a sha1 mismatch. The below patch allows big endian to be detected correctly using GCC 4.0 and probably older versions as well.
+",open,2020-10-30T20:10:43Z,alex-free,,1,8,0,1
+Fix potential segfault on cloning invalid tag,906,"Changes since v1:
+* Reworked the patch to use the fallback approach based on feedback from Jeff King.
+
+
+cc: Jeff King <peff@peff.net>",open,2020-10-30T08:29:28Z,sohomdatta1,,1,79,5,2
+Completion: Fix DWIM completion for remotes,902,"There is a redundant function, `__gitcomp_direct_append`, that has
+broken DWIM remote completion in the last few months.
+
+This commit removes this function and fixes incorrect behavior
+
+
+This commit resolves the bug reported [here](https://stackoverflow.com/questions/63776252/git-tab-completion-stopped-working-on-remote-branches/64398433#64398433) (https://stackoverflow.com/questions/63776252/git-tab-completion-stopped-working-on-remote-branches/64398433#64398433)
+
+",open,2020-10-26T16:04:53Z,vegerot,,1,1,14,1
+"Beginning of new merge strategy: New API, empty implementation",895,"In this series, I show the new merge API I have developed in merge-ort, and show how it differs from that provided by merge-recursive.  I do this in four steps, each corresponding to a patch.
+
+Changes since v4:
+  * Fix a bug where 'cherry-pick --continue' would report 'fatal: cherry-pick: --strategy cannot be used with --continue' when pull.twohead was set to ort (found by user of internal deployment at $DAYJOB)
+
+cc: Elijah Newren <newren@gmail.com>
+cc: Taylor Blau <me@ttaylorr.com>
+cc: Peter Baumann <peter.baumann@gmail.com>
+cc: Jonathan Tan <jonathantanmy@google.com>
+cc: Eric Sunshine <sunshine@sunshineco.com>
+cc: SZEDER Gábor <szeder.dev@gmail.com>
+cc: Jacob Keller <jacob.keller@gmail.com>",open,2020-10-21T07:48:08Z,newren,,4,517,15,13
+Add '*' pretty-format placeholder modifier,890,This new placeholder allows for line-feed insertion after a non-empty placeholder.,open,2020-10-18T15:20:13Z,Fointard,,2,10,0,2
+gitk: add option to perform 'git fetch' command,872,"There wasn't ability to perform 'git fetch' from gitk tool.
+Add 'Fetch' option to 'File' menu.
+Bind it to 'F7' key.
+
+Signed-off-by: Vladimir Chigarev <chiga17@mail.ru>
+
+Thanks for taking the time to contribute to Git! Please be advised that the
+Git community does not use github.com for their contributions. Instead, we use
+a mailing list (git@vger.kernel.org) for code submissions, code reviews, and
+bug reports. Nevertheless, you can use GitGitGadget (https://gitgitgadget.github.io/)
+to conveniently send your Pull Requests commits to our mailing list.
+
+Please read the ""guidelines for contributing"" linked above!
+",open,2020-10-09T13:50:20Z,chiga17,,1,31,0,1
+docs: Clarify git rm --cached function in gitignore note,862,Added text explaining that the `git rm --cached` command isn't analogous to the `gitignore` file and that the file will need to be added to `gitignore` to prevent later commits from adding the file back.,open,2020-10-05T08:11:11Z,sohomdatta1,,1,3,1,1
+userdiff: add userdiff patterns for ts files (TypeScript),859,"[TypeScript](https://www.typescriptlang.org/) is an open-source language which builds on JavaScript, one of the world's most used tools, by adding static type definitions. In participating this year's Open Source Day hosted as part of the virtual Grace Hopper Conference, the proposed changes aim to address [this issue](https://github.com/microsoft/TypeScript/issues/36185) of adding diff chunk header lines to Git for **.ts** file extension.
+
+The regex patterns match both traditional/arrow function expressions:
+```typescript
+const add = (a, b) => a + b
+```
+```typescript
+public function add() { ...
+```
+
+Signed-off-by: Alice Kim [aliceykim0828@gmail.com](mailto:aliceykim0828@gmail.com)",open,2020-10-02T00:50:13Z,yehee,,1,2,0,1
+Circleci project setup,857,"Thanks for taking the time to contribute to Git! Please be advised that the
+Git community does not use github.com for their contributions. Instead, we use
+a mailing list (git@vger.kernel.org) for code submissions, code reviews, and
+bug reports. Nevertheless, you can use GitGitGadget (https://gitgitgadget.github.io/)
+to conveniently send your Pull Requests commits to our mailing list.
+
+Please read the ""guidelines for contributing"" linked above!
+",open,2020-09-28T02:27:58Z,kadirselcuk,,4,13,0,1
+reftable library,847,"This splits the giant commit from https://github.com/gitgitgadget/git/pull/539 into a series of smaller commits, which build and have unittests.
+
+The final commit should also be split up, but I want to wait until we have consensus that the bottom commits look good.
+  
+
+cc: Han-Wen Nienhuys <hanwen@google.com>
+cc: Jeff King <peff@peff.net>
+cc: Ramsay Jones <ramsay@ramsayjones.plus.com>
+cc: Jonathan Nieder <jrnieder@gmail.com>
+cc: Johannes Schindelin <Johannes.Schindelin@gmx.de>
+cc: Jonathan Tan <jonathantanmy@google.com>
+cc: Josh Steadmon <steadmon@google.com>
+cc: Emily Shaffer <emilyshaffer@google.com>
+cc: Patrick Steinhardt <ps@pks.im>
+cc: Ævar Arnfjörð Bjarmason <avarab@gmail.com>",open,2020-09-16T18:42:20Z,hanwen,,13,10474,5,56
+config: improve error message for boolean config,841,"Currently invalid boolean config values return messages about 'bad
+numeric', which I found misleading when the error was due to a
+boolean string value. This change makes the error message reflect
+the boolean value.
+
+The current approach relies on `GIT_TEST_GETTEXT_POISON` 
+being a boolean value, moving its special case out from 
+`die_bad_number()` and into `git_config_bool_or_int()`. An
+alternative could be for `die_bad_number()` to handle boolean
+values when erroring, although the function name might need to
+change if it is handling non-numeric values.
+
+Signed-off-by: Andrew Klotz <agc.klotz@gmail.com>
+
+
+
+cc: Jeff King <peff@peff.net>
+cc: Phillip Wood <phillip.wood123@gmail.com>",open,2020-09-12T20:56:22Z,KlotzAndrew,,2,15,13,2
+Add struct strmap and associated utility functions,835,"Here I introduce new strmap, strintmap, and strset types.
+
+Changes since v5:
+  * Fixed a typo in forward declaration of struct mem_pool, spotted by Phillip.  (Usage via pointers meant gcc & clang wouldn't complain.)
+
+[1] https://lore.kernel.org/git/20180906191203.GA26184@sigill.intra.peff.net/
+
+CC: Jeff King <peff@peff.net>
+cc: Elijah Newren <newren@gmail.com>
+cc: Phillip Wood <phillip.wood123@gmail.com>
+cc: Chris Torek <chris.torek@gmail.com>",open,2020-08-21T16:45:03Z,newren,,15,621,170,27
+"GitSVN: Multi line support of ignore-path, include-paths and skiping of empty commits",834,"[PATCH]v3 GitSVN: Multi line support of ignore-path, include-paths and skiping of empty commits
+
+I used the ignore-paths option to ignore a lot of stuff I don’t need. The ignore pattern works well, but it could and up in empty commits. So just the message without any modifications / changes. The patch below skip a commit if all changes are ignored by the ignore-paths option. In order to use this feature I includes the option to read configuration for ignore-path, include-paths in several lines. So that the user is not limited by the max. char. per line definition.
+In Addition this patch includes the optimizations which are mansion from your side.
+
+Regarding the subrouties comments i oriented by this example: https://www.perlmonks.org/?node_id=29905 
+
+Changes in v3:
+- Changed the code format (spaces etc.)
+- Wrap reg-expression by (?:\<expression1\>|\<expression2\>)
+- Removed useless variable init
+- Removed useless check.
+
+",open,2020-08-18T07:17:28Z,lukaspupkalipinski,,2,60,5,3
+ignore binary file diffs in git-p4 commit,833,"Currently, when submitting commits, `git p4 submit` helpfully builds a diff of changes, and then displays them in a text editor before continuing (mimicking standard git commit behaviour). For changed files it asks git for the diff, but if a file is added it dumps all of its lines; to do so it opens a file, but as a text -- which obviously fails if a file is binary, raising `UnicodeDecodeError`.
+
+This simple patch catches that exception and stops building the diff, so only the name of the added file is included.
+",open,2020-08-17T20:01:16Z,berislavlopac,,1,7,3,1
+unpack-trees: do not set SKIP_WORKTREE on submodules,809,"Interactions between submodules and sparsity patterns have come up a few times, with a certain edge case coming up multiple times recently: should a submodule have the SKIP_WORKTREE bit set if the submodule path does not match the sparsity patterns?[1][2][3].
+
+Here I try to resolve the question, with the answer of 'no'.
+
+This patch depends on en/sparse-with-submodule-doc lightly -- the commit message in this patch references the commit from that other series.  It could possibly be considered an addition to that other topic, but ""sparse-with-submodule-doc"" implies the other topic is only a documentation change, whereas this patch involves a code change.
+
+
+
+[1] https://lore.kernel.org/git/pull.805.git.git.1591831009762.gitgitgadget@gmail.com/
+> Since submodules may have unpushed changes or untracked files,
+> removing them could result in data loss.  Thus, changing sparse
+> inclusion/exclusion rules will not cause an already checked out
+> submodule to be removed from the working copy.  Said another way, just
+> as `checkout` will not cause submodules to be automatically removed or
+> initialized even when switching between branches that remove or add
+> submodules, using `sparse-checkout` to reduce or expand the scope of
+> ""interesting"" files will not cause submodules to be automatically
+> deinitialized or initialized either.
+
+[2] https://lore.kernel.org/git/CABPp-BE+BL3Nq=Co=-kNB_wr=6gqX8zcGwa0ega_pGBpk6xYsg@mail.gmail.com/
+> If sparsity patterns would exclude a submodule that is initialized,
+> sparse-checkout clearly can't remove the submodule.  However, should
+> it set the SKIP_WORKTREE bit for that submodule if it's not going to
+> remove it?
+
+[3] https://lore.kernel.org/git/CABPp-BFJG7uFAZNidDPK2o7eHv-eYBsmcdnVxkOnKcZo7WzmFQ@mail.gmail.com/
+>> Or if you don't
+>> deinitialize a submodule that is excluded by the sparsity patterns
+>> (thus remaining in the working copy, anyway).
+>
+> This case requires more thought.  If a submodule doesn't match the
+> sparsity patterns, we already said elsewhere that sparse-checkout
+> should not remove the submodule (since doing so would risk data loss).
+> But do we set the SKIP_WORKTREE bit for it?  Generally,
+> sparse-checkout avoids removing files with modifications, and if it
+> doesn't remove them it also doesn't set the SKIP_WORKTREE bit.  For
+> consistency, should sparse-checkout not set SKIP_WORKTREE for
+> initialized submodules?
+
+CC: matheus.bernardino@usp.br, dstolee@microsoft.com",open,2020-06-17T00:18:24Z,newren,,1,3,2,1
+doc: ls-tree paths do not support wildcards,796,"The documentation for `ls-tree` says that paths can be wildcards, but this appears to be incorrect, only raw paths seem to work.",open,2020-05-28T19:23:19Z,onlynone,,1,9,3,2
+Add gitpod config,790,"this commit adds support for Gitpod.io, a free automated
+dev environment that makes contributing and generally working on GitHub
+projects much easier. It allows anyone to start a ready-to-code dev
+environment for any branch, issue and pull request with a single click.
+
+
+Thanks for taking the time to contribute to Git! Please be advised that the
+Git community does not use github.com for their contributions. Instead, we use
+a mailing list (git@vger.kernel.org) for code submissions, code reviews, and
+bug reports. Nevertheless, you can use GitGitGadget (https://gitgitgadget.github.io/)
+to conveniently send your Pull Requests commits to our mailing list.
+
+Please read the ""guidelines for contributing"" linked above!
+",open,2020-05-21T11:44:11Z,mikeg98,,2,17,0,4
+Change the explanation so that it cannot be misinterpreted.,769,"The "", as if you are giving orders to the codebase to change its behavior"" describes a correct and two incorrect examples. It is unclear which of the examples it refers to and can be easily misinterpreted.
+
+Thanks for taking the time to contribute to Git! Please be advised that the
+Git community does not use github.com for their contributions. Instead, we use
+a mailing list (git@vger.kernel.org) for code submissions, code reviews, and
+bug reports. Nevertheless, you can use GitGitGadget (https://gitgitgadget.github.io/)
+to conveniently send your Pull Requests commits to our mailing list.
+
+Please read the ""guidelines for contributing"" linked above!
+",open,2020-04-27T06:34:41Z,mickerules,,2,6,4,1
+gitweb: fix tests on uninitialized hash indexes to avoid uninitialized value warnings in server log,767,"It's happened that I tried to solve lots of meaningless warnings
+in web server error log.
+
+I think it makes no sense to spam error log with warnings about
+uninitialized value when trying to run careless tests on undefined
+hash indexes.
+
+This is a simple fix that I did long ago that check carefully the
+index before running tests on it.
+
+I added myself as warning fix author as well.
+
+My goal is to avoid re-applying the patch on each distribution update.
+
+The warning message fixed in web server error log :
+Use of uninitialized value $params{""action""} in string eq at gitweb.cgi
+line 1377
+
+Raphaël Gertz:
+ gitweb/README: add myself as warning fix author
+ gitweb/gitweb.perl: fix careless test on undefined hash indexes
+
+ gitweb/README      | 3 +++
+ gitweb/gitweb.perl | 4 ++--
+ 2 files changed, 5 insertions(+), 2 deletions(-)
+
+Signed-off-by: Raphaël Gertz <git@rapsys.eu>",open,2020-04-24T12:20:39Z,rapsys,,1,5,2,2
+Xdiff as submodule,765,"This PR is here for CI testing. 
+",open,2020-04-22T05:43:56Z,j143,,1,4,4242,17
+Localize the repository variable,763,"Hi, this issue has already been discussed [on the mailing list](https://public-inbox.org/git/pull.545.git.1581535151.gitgitgadget@gmail.com/#t).
+Just to brief, it passes `r` as a parameter to all functions in object.c which use `the_repository` as a global variable otherwise.
+",open,2020-04-19T10:02:19Z,ParthGala2k,,5,89,61,20
+new feature: `GIT_CONFIG_OVERRIDE=~/gitconfig_tmp git args...`,761,"this patch/PR implements the feature I've been asking for in
+https://public-inbox.org/git/CANri+Ey71QbWxNH+RhMfYuUSDEpYtv28ushUhK8Tt0xWUAU9iw@mail.gmail.com/
+A new environment variable `GIT_CONFIG_OVERRIDE` allows bypassing
+system+user config files and instead use $GIT_CONFIG_OVERRIDE as config file;
+when empty, it'll just not parse any user/system/override config file.
+However the repo config file is still read.
+Examples:
+```
+GIT_CONFIG_OVERRIDE=~/gitconfig_tmp git diff # skip system/user cfg files
+and read instead ~/gitconfig_tmp
+GIT_CONFIG_OVERRIDE= git remote -v # skip system/user cfg files 
+```
+
+## rationale
+before this patch, git makes it impossible to ignore or override global
+(system+user) gitconfig. This is essentially what's being asked here:
+https://stackoverflow.com/questions/23400449/how-to-make-git-temporarily-ignore-gitconfig
+except I'm also allowing to read a custom config file. Note that that config
+file can `include` other files including user config file, if user wants
+to, so no loss of generality.
+
+## existing alternatives are not good
+* temporarily moving ~/.gitconfig (+other locations eg XDG + system) is
+error prone (needs to be undone, and can affect other running processes)
+* setting `GIT_CONFIG` is a noop for most git commands, eg `git diff`
+* adding a flag, eg `--gitconfig_override ~/gitconfig_tmp`, is not good, as
+there'd be no way to pass that flag in a complex script with lots of
+`git` command invocations; especially if called from a binary
+
+CC: Jeff King <peff@peff.net>
+
+",open,2020-04-18T08:51:13Z,timotheecour,,1,32,12,3
+clone: document partial clone section,745,"Partial clones are created using 'git clone', but there is no related
+help information in the git-clone documentation during a period. Add
+a relevant section to help users understand what partial clones are
+and how they differ from normal clones.
+
+The section briefly introduces the applicable scenarios and some
+precautions of partial clone. If users want to know more about its
+technical design and other details, users can view the link of
+git-partial-clone(7) according to the guidelines in the section.
+
+cc: Philippe Blain <levraiphilippeblain@gmail.com>",open,2020-04-01T14:40:27Z,dyrone,,1,69,0,1
+t\lib-submodule-update.sh: change `test -(e|f|d)` to `test_path_is_*`,741,"Change `test -(e|f|d)` to helper functions for easier debugging.
+GSoC Microproject.
+(From: https://git.github.io/SoC-2020-Microprojects/#use-test_path_is_-functions-in-test-scripts)
+Find one test script that verifies the presence/absence of
+files/directories with `test -(e|f|d|…)` and replace them with the
+appropriate test_path_is_file, test_path_is_dir, etc. helper functions.
+
+Signed-off-by: Kartik Soneji <kartiksoneji@rocketmail.com>
+",open,2020-03-28T17:17:43Z,KartikSoneji,,1,12,12,1
+bisect: remove root directory restriction for git bisect,736,"    according to the open issue #486 the git bisect
+    command should be able to run from inside any
+    subdirectory and in the same disscusion ""dscho""
+    gave the directions and those directions lead me
+    the fix of adding SUBDIRECTORY_OK=Yes on L#34
+    before sourcing git-sh-setup that made it work as
+    in git-sh-setup there was a check on SUBDIRECTORY_OK
+    that prevents it to run in sub directories if it is not
+    set to ""ok"" as this file was also sourced in other commands
+    that are required to only run from root one of such scripts
+    is git-filter-branch
+
+Thanks for taking the time to contribute to Git! Please be advised that the
+Git community does not use github.com for their contributions. Instead, we use
+a mailing list (git@vger.kernel.org) for code submissions, code reviews, and
+bug reports. Nevertheless, you can use GitGitGadget (https://gitgitgadget.github.io/)
+to conveniently send your Pull Requests commits to our mailing list.
+
+Please read the ""guidelines for contributing"" linked above!
+",open,2020-03-21T14:41:53Z,sheikhhamza012,,1,3,4,2
+Typo: dot after sentence,730,,open,2020-03-18T10:43:49Z,hginzel,,3,2,2,2
+doc: use 'rev' instead of 'commit' for merge-base arguments,719,"The notation `<commit>` can be misunderstandable only for commit SHA1,
+but merge-base accepts any commit references. Like rev-parse, the name
+of arguments should be `<rev>` instead of `<commit>`.
+
+Changes since v1:
+- Use `rev` instead of `ref`, not `commit-ish` which is less used than `rev`
+  through the document.
+
+Signed-off-by: Takuya Noguchi <takninnovationresearch@gmail.com>",open,2020-03-02T14:27:36Z,tnir,,1,11,11,2
+git,"userdiff: php: Improved test cases used to catch ""abstract"" and ""final"" functions",915,"Since the original tests cases were using other detectable keywords (like ""public"" or ""protected""), they are able to pass even if the keywords intended to be covered are not present.
+In the case of the test for ""abstract"" keyword, the method's body was updated in the fixture, since PHP doesn't allow an abstract method to have a body.
+
+Signed-off-by: Javier Spagnoletti <phansys@gmail.com>
+
+cc: Johannes Sixt <j6t@kdbg.org>",open,2020-11-14T13:14:57Z,phansys,,1,5,2,2
+git,Add filter-branch.squelchWarning git config alongside FILTER_BRANCH_SQUELCH_WARNING,912,"In addition to the environment variable FILTER_BRANCH_SQUELCH_WARNING,
+the git config filter-branch.squelchWarning is checked to see if the
+usage warning should be squelched.
+
+Thanks for taking the time to contribute to Git! Please be advised that the
+Git community does not use github.com for their contributions. Instead, we use
+a mailing list (git@vger.kernel.org) for code submissions, code reviews, and
+bug reports. Nevertheless, you can use GitGitGadget (https://gitgitgadget.github.io/)
+to conveniently send your Pull Requests commits to our mailing list.
+
+Please read the ""guidelines for contributing"" linked above!
+",open,2020-11-10T11:14:54Z,dhoepfl,,1,8,2,1
+git,Simplified merge logic,911,"Thanks for taking the time to contribute to Git! Please be advised that the
+Git community does not use github.com for their contributions. Instead, we use
+a mailing list (git@vger.kernel.org) for code submissions, code reviews, and
+bug reports. Nevertheless, you can use GitGitGadget (https://gitgitgadget.github.io/)
+to conveniently send your Pull Requests commits to our mailing list.
+
+Please read the ""guidelines for contributing"" linked above!
+
+The logic for the merging is somewhat confusing. So I simplified it to be equivalent. I tested all my changes to ensure in practice they work.
+
+The first thing I did was test out which branch would occur for every possible value of 
+
+remoteheads->next | common->next | option_commit | Branch
+-- | -- | -- | --
+T | T | T | A
+T | T | F | A
+T | F | T | A
+T | F | F | A
+F | T | T | C
+F | T | F | C
+F | F | T | B
+F | F | F | A
+
+Using this truth table, I was able to deduce that if the second branch ran, the if statement for the first branch was false. Taking the inverse, it was then found many of the checks were redundant, so the if statement was rewritten to have each branch run under the same exact conditions, except each value is evaluated as little as possible.
+
+I hope you can approve of this and show me how to send it.
+
+Thank you.
+",open,2020-11-07T21:17:58Z,pi1024e,,1,38,44,1
+git,fix gcc 4.0 big endian sha1,907,"Currently, sha1.c is compiled in little endian mode when using gcc 4.0 on Mac OS X 10.4 PowerPC (which is big endian). This results in a build that always states there is a sha1 mismatch. The below patch allows big endian to be detected correctly using GCC 4.0 and probably older versions as well.
+",open,2020-10-30T20:10:43Z,alex-free,,1,8,0,1
+git,Fix potential segfault on cloning invalid tag,906,"Changes since v1:
+* Reworked the patch to use the fallback approach based on feedback from Jeff King.
+
+
+cc: Jeff King <peff@peff.net>",open,2020-10-30T08:29:28Z,sohomdatta1,,1,79,5,2
+git,Completion: Fix DWIM completion for remotes,902,"There is a redundant function, `__gitcomp_direct_append`, that has
+broken DWIM remote completion in the last few months.
+
+This commit removes this function and fixes incorrect behavior
+
+
+This commit resolves the bug reported [here](https://stackoverflow.com/questions/63776252/git-tab-completion-stopped-working-on-remote-branches/64398433#64398433) (https://stackoverflow.com/questions/63776252/git-tab-completion-stopped-working-on-remote-branches/64398433#64398433)
+
+",open,2020-10-26T16:04:53Z,vegerot,,1,1,14,1
+git,"Beginning of new merge strategy: New API, empty implementation",895,"In this series, I show the new merge API I have developed in merge-ort, and show how it differs from that provided by merge-recursive.  I do this in four steps, each corresponding to a patch.
+
+Changes since v4:
+  * Fix a bug where 'cherry-pick --continue' would report 'fatal: cherry-pick: --strategy cannot be used with --continue' when pull.twohead was set to ort (found by user of internal deployment at $DAYJOB)
+
+cc: Elijah Newren <newren@gmail.com>
+cc: Taylor Blau <me@ttaylorr.com>
+cc: Peter Baumann <peter.baumann@gmail.com>
+cc: Jonathan Tan <jonathantanmy@google.com>
+cc: Eric Sunshine <sunshine@sunshineco.com>
+cc: SZEDER Gábor <szeder.dev@gmail.com>
+cc: Jacob Keller <jacob.keller@gmail.com>",open,2020-10-21T07:48:08Z,newren,,4,517,15,13
+git,Add '*' pretty-format placeholder modifier,890,This new placeholder allows for line-feed insertion after a non-empty placeholder.,open,2020-10-18T15:20:13Z,Fointard,,2,10,0,2
+git,gitk: add option to perform 'git fetch' command,872,"There wasn't ability to perform 'git fetch' from gitk tool.
+Add 'Fetch' option to 'File' menu.
+Bind it to 'F7' key.
+
+Signed-off-by: Vladimir Chigarev <chiga17@mail.ru>
+
+Thanks for taking the time to contribute to Git! Please be advised that the
+Git community does not use github.com for their contributions. Instead, we use
+a mailing list (git@vger.kernel.org) for code submissions, code reviews, and
+bug reports. Nevertheless, you can use GitGitGadget (https://gitgitgadget.github.io/)
+to conveniently send your Pull Requests commits to our mailing list.
+
+Please read the ""guidelines for contributing"" linked above!
+",open,2020-10-09T13:50:20Z,chiga17,,1,31,0,1
+git,docs: Clarify git rm --cached function in gitignore note,862,Added text explaining that the `git rm --cached` command isn't analogous to the `gitignore` file and that the file will need to be added to `gitignore` to prevent later commits from adding the file back.,open,2020-10-05T08:11:11Z,sohomdatta1,,1,3,1,1
+git,userdiff: add userdiff patterns for ts files (TypeScript),859,"[TypeScript](https://www.typescriptlang.org/) is an open-source language which builds on JavaScript, one of the world's most used tools, by adding static type definitions. In participating this year's Open Source Day hosted as part of the virtual Grace Hopper Conference, the proposed changes aim to address [this issue](https://github.com/microsoft/TypeScript/issues/36185) of adding diff chunk header lines to Git for **.ts** file extension.
+
+The regex patterns match both traditional/arrow function expressions:
+```typescript
+const add = (a, b) => a + b
+```
+```typescript
+public function add() { ...
+```
+
+Signed-off-by: Alice Kim [aliceykim0828@gmail.com](mailto:aliceykim0828@gmail.com)",open,2020-10-02T00:50:13Z,yehee,,1,2,0,1
+git,Circleci project setup,857,"Thanks for taking the time to contribute to Git! Please be advised that the
+Git community does not use github.com for their contributions. Instead, we use
+a mailing list (git@vger.kernel.org) for code submissions, code reviews, and
+bug reports. Nevertheless, you can use GitGitGadget (https://gitgitgadget.github.io/)
+to conveniently send your Pull Requests commits to our mailing list.
+
+Please read the ""guidelines for contributing"" linked above!
+",open,2020-09-28T02:27:58Z,kadirselcuk,,4,13,0,1
+git,reftable library,847,"This splits the giant commit from https://github.com/gitgitgadget/git/pull/539 into a series of smaller commits, which build and have unittests.
+
+The final commit should also be split up, but I want to wait until we have consensus that the bottom commits look good.
+  
+
+cc: Han-Wen Nienhuys <hanwen@google.com>
+cc: Jeff King <peff@peff.net>
+cc: Ramsay Jones <ramsay@ramsayjones.plus.com>
+cc: Jonathan Nieder <jrnieder@gmail.com>
+cc: Johannes Schindelin <Johannes.Schindelin@gmx.de>
+cc: Jonathan Tan <jonathantanmy@google.com>
+cc: Josh Steadmon <steadmon@google.com>
+cc: Emily Shaffer <emilyshaffer@google.com>
+cc: Patrick Steinhardt <ps@pks.im>
+cc: Ævar Arnfjörð Bjarmason <avarab@gmail.com>",open,2020-09-16T18:42:20Z,hanwen,,13,10474,5,56
+git,config: improve error message for boolean config,841,"Currently invalid boolean config values return messages about 'bad
+numeric', which I found misleading when the error was due to a
+boolean string value. This change makes the error message reflect
+the boolean value.
+
+The current approach relies on `GIT_TEST_GETTEXT_POISON` 
+being a boolean value, moving its special case out from 
+`die_bad_number()` and into `git_config_bool_or_int()`. An
+alternative could be for `die_bad_number()` to handle boolean
+values when erroring, although the function name might need to
+change if it is handling non-numeric values.
+
+Signed-off-by: Andrew Klotz <agc.klotz@gmail.com>
+
+
+
+cc: Jeff King <peff@peff.net>
+cc: Phillip Wood <phillip.wood123@gmail.com>",open,2020-09-12T20:56:22Z,KlotzAndrew,,2,15,13,2
+git,Add struct strmap and associated utility functions,835,"Here I introduce new strmap, strintmap, and strset types.
+
+Changes since v5:
+  * Fixed a typo in forward declaration of struct mem_pool, spotted by Phillip.  (Usage via pointers meant gcc & clang wouldn't complain.)
+
+[1] https://lore.kernel.org/git/20180906191203.GA26184@sigill.intra.peff.net/
+
+CC: Jeff King <peff@peff.net>
+cc: Elijah Newren <newren@gmail.com>
+cc: Phillip Wood <phillip.wood123@gmail.com>
+cc: Chris Torek <chris.torek@gmail.com>",open,2020-08-21T16:45:03Z,newren,,15,621,170,27
+git,"GitSVN: Multi line support of ignore-path, include-paths and skiping of empty commits",834,"[PATCH]v3 GitSVN: Multi line support of ignore-path, include-paths and skiping of empty commits
+
+I used the ignore-paths option to ignore a lot of stuff I don’t need. The ignore pattern works well, but it could and up in empty commits. So just the message without any modifications / changes. The patch below skip a commit if all changes are ignored by the ignore-paths option. In order to use this feature I includes the option to read configuration for ignore-path, include-paths in several lines. So that the user is not limited by the max. char. per line definition.
+In Addition this patch includes the optimizations which are mansion from your side.
+
+Regarding the subrouties comments i oriented by this example: https://www.perlmonks.org/?node_id=29905 
+
+Changes in v3:
+- Changed the code format (spaces etc.)
+- Wrap reg-expression by (?:\<expression1\>|\<expression2\>)
+- Removed useless variable init
+- Removed useless check.
+
+",open,2020-08-18T07:17:28Z,lukaspupkalipinski,,2,60,5,3
+git,ignore binary file diffs in git-p4 commit,833,"Currently, when submitting commits, `git p4 submit` helpfully builds a diff of changes, and then displays them in a text editor before continuing (mimicking standard git commit behaviour). For changed files it asks git for the diff, but if a file is added it dumps all of its lines; to do so it opens a file, but as a text -- which obviously fails if a file is binary, raising `UnicodeDecodeError`.
+
+This simple patch catches that exception and stops building the diff, so only the name of the added file is included.
+",open,2020-08-17T20:01:16Z,berislavlopac,,1,7,3,1
+git,unpack-trees: do not set SKIP_WORKTREE on submodules,809,"Interactions between submodules and sparsity patterns have come up a few times, with a certain edge case coming up multiple times recently: should a submodule have the SKIP_WORKTREE bit set if the submodule path does not match the sparsity patterns?[1][2][3].
+
+Here I try to resolve the question, with the answer of 'no'.
+
+This patch depends on en/sparse-with-submodule-doc lightly -- the commit message in this patch references the commit from that other series.  It could possibly be considered an addition to that other topic, but ""sparse-with-submodule-doc"" implies the other topic is only a documentation change, whereas this patch involves a code change.
+
+
+
+[1] https://lore.kernel.org/git/pull.805.git.git.1591831009762.gitgitgadget@gmail.com/
+> Since submodules may have unpushed changes or untracked files,
+> removing them could result in data loss.  Thus, changing sparse
+> inclusion/exclusion rules will not cause an already checked out
+> submodule to be removed from the working copy.  Said another way, just
+> as `checkout` will not cause submodules to be automatically removed or
+> initialized even when switching between branches that remove or add
+> submodules, using `sparse-checkout` to reduce or expand the scope of
+> ""interesting"" files will not cause submodules to be automatically
+> deinitialized or initialized either.
+
+[2] https://lore.kernel.org/git/CABPp-BE+BL3Nq=Co=-kNB_wr=6gqX8zcGwa0ega_pGBpk6xYsg@mail.gmail.com/
+> If sparsity patterns would exclude a submodule that is initialized,
+> sparse-checkout clearly can't remove the submodule.  However, should
+> it set the SKIP_WORKTREE bit for that submodule if it's not going to
+> remove it?
+
+[3] https://lore.kernel.org/git/CABPp-BFJG7uFAZNidDPK2o7eHv-eYBsmcdnVxkOnKcZo7WzmFQ@mail.gmail.com/
+>> Or if you don't
+>> deinitialize a submodule that is excluded by the sparsity patterns
+>> (thus remaining in the working copy, anyway).
+>
+> This case requires more thought.  If a submodule doesn't match the
+> sparsity patterns, we already said elsewhere that sparse-checkout
+> should not remove the submodule (since doing so would risk data loss).
+> But do we set the SKIP_WORKTREE bit for it?  Generally,
+> sparse-checkout avoids removing files with modifications, and if it
+> doesn't remove them it also doesn't set the SKIP_WORKTREE bit.  For
+> consistency, should sparse-checkout not set SKIP_WORKTREE for
+> initialized submodules?
+
+CC: matheus.bernardino@usp.br, dstolee@microsoft.com",open,2020-06-17T00:18:24Z,newren,,1,3,2,1
+git,doc: ls-tree paths do not support wildcards,796,"The documentation for `ls-tree` says that paths can be wildcards, but this appears to be incorrect, only raw paths seem to work.",open,2020-05-28T19:23:19Z,onlynone,,1,9,3,2
+git,Add gitpod config,790,"this commit adds support for Gitpod.io, a free automated
+dev environment that makes contributing and generally working on GitHub
+projects much easier. It allows anyone to start a ready-to-code dev
+environment for any branch, issue and pull request with a single click.
+
+
+Thanks for taking the time to contribute to Git! Please be advised that the
+Git community does not use github.com for their contributions. Instead, we use
+a mailing list (git@vger.kernel.org) for code submissions, code reviews, and
+bug reports. Nevertheless, you can use GitGitGadget (https://gitgitgadget.github.io/)
+to conveniently send your Pull Requests commits to our mailing list.
+
+Please read the ""guidelines for contributing"" linked above!
+",open,2020-05-21T11:44:11Z,mikeg98,,2,17,0,4
+git,Change the explanation so that it cannot be misinterpreted.,769,"The "", as if you are giving orders to the codebase to change its behavior"" describes a correct and two incorrect examples. It is unclear which of the examples it refers to and can be easily misinterpreted.
+
+Thanks for taking the time to contribute to Git! Please be advised that the
+Git community does not use github.com for their contributions. Instead, we use
+a mailing list (git@vger.kernel.org) for code submissions, code reviews, and
+bug reports. Nevertheless, you can use GitGitGadget (https://gitgitgadget.github.io/)
+to conveniently send your Pull Requests commits to our mailing list.
+
+Please read the ""guidelines for contributing"" linked above!
+",open,2020-04-27T06:34:41Z,mickerules,,2,6,4,1
+git,gitweb: fix tests on uninitialized hash indexes to avoid uninitialized value warnings in server log,767,"It's happened that I tried to solve lots of meaningless warnings
+in web server error log.
+
+I think it makes no sense to spam error log with warnings about
+uninitialized value when trying to run careless tests on undefined
+hash indexes.
+
+This is a simple fix that I did long ago that check carefully the
+index before running tests on it.
+
+I added myself as warning fix author as well.
+
+My goal is to avoid re-applying the patch on each distribution update.
+
+The warning message fixed in web server error log :
+Use of uninitialized value $params{""action""} in string eq at gitweb.cgi
+line 1377
+
+Raphaël Gertz:
+ gitweb/README: add myself as warning fix author
+ gitweb/gitweb.perl: fix careless test on undefined hash indexes
+
+ gitweb/README      | 3 +++
+ gitweb/gitweb.perl | 4 ++--
+ 2 files changed, 5 insertions(+), 2 deletions(-)
+
+Signed-off-by: Raphaël Gertz <git@rapsys.eu>",open,2020-04-24T12:20:39Z,rapsys,,1,5,2,2
+git,Xdiff as submodule,765,"This PR is here for CI testing. 
+",open,2020-04-22T05:43:56Z,j143,,1,4,4242,17
+git,Localize the repository variable,763,"Hi, this issue has already been discussed [on the mailing list](https://public-inbox.org/git/pull.545.git.1581535151.gitgitgadget@gmail.com/#t).
+Just to brief, it passes `r` as a parameter to all functions in object.c which use `the_repository` as a global variable otherwise.
+",open,2020-04-19T10:02:19Z,ParthGala2k,,5,89,61,20
+git,new feature: `GIT_CONFIG_OVERRIDE=~/gitconfig_tmp git args...`,761,"this patch/PR implements the feature I've been asking for in
+https://public-inbox.org/git/CANri+Ey71QbWxNH+RhMfYuUSDEpYtv28ushUhK8Tt0xWUAU9iw@mail.gmail.com/
+A new environment variable `GIT_CONFIG_OVERRIDE` allows bypassing
+system+user config files and instead use $GIT_CONFIG_OVERRIDE as config file;
+when empty, it'll just not parse any user/system/override config file.
+However the repo config file is still read.
+Examples:
+```
+GIT_CONFIG_OVERRIDE=~/gitconfig_tmp git diff # skip system/user cfg files
+and read instead ~/gitconfig_tmp
+GIT_CONFIG_OVERRIDE= git remote -v # skip system/user cfg files 
+```
+
+## rationale
+before this patch, git makes it impossible to ignore or override global
+(system+user) gitconfig. This is essentially what's being asked here:
+https://stackoverflow.com/questions/23400449/how-to-make-git-temporarily-ignore-gitconfig
+except I'm also allowing to read a custom config file. Note that that config
+file can `include` other files including user config file, if user wants
+to, so no loss of generality.
+
+## existing alternatives are not good
+* temporarily moving ~/.gitconfig (+other locations eg XDG + system) is
+error prone (needs to be undone, and can affect other running processes)
+* setting `GIT_CONFIG` is a noop for most git commands, eg `git diff`
+* adding a flag, eg `--gitconfig_override ~/gitconfig_tmp`, is not good, as
+there'd be no way to pass that flag in a complex script with lots of
+`git` command invocations; especially if called from a binary
+
+CC: Jeff King <peff@peff.net>
+
+",open,2020-04-18T08:51:13Z,timotheecour,,1,32,12,3
+git,clone: document partial clone section,745,"Partial clones are created using 'git clone', but there is no related
+help information in the git-clone documentation during a period. Add
+a relevant section to help users understand what partial clones are
+and how they differ from normal clones.
+
+The section briefly introduces the applicable scenarios and some
+precautions of partial clone. If users want to know more about its
+technical design and other details, users can view the link of
+git-partial-clone(7) according to the guidelines in the section.
+
+cc: Philippe Blain <levraiphilippeblain@gmail.com>",open,2020-04-01T14:40:27Z,dyrone,,1,69,0,1
+git,t\lib-submodule-update.sh: change `test -(e|f|d)` to `test_path_is_*`,741,"Change `test -(e|f|d)` to helper functions for easier debugging.
+GSoC Microproject.
+(From: https://git.github.io/SoC-2020-Microprojects/#use-test_path_is_-functions-in-test-scripts)
+Find one test script that verifies the presence/absence of
+files/directories with `test -(e|f|d|…)` and replace them with the
+appropriate test_path_is_file, test_path_is_dir, etc. helper functions.
+
+Signed-off-by: Kartik Soneji <kartiksoneji@rocketmail.com>
+",open,2020-03-28T17:17:43Z,KartikSoneji,,1,12,12,1
+git,bisect: remove root directory restriction for git bisect,736,"    according to the open issue #486 the git bisect
+    command should be able to run from inside any
+    subdirectory and in the same disscusion ""dscho""
+    gave the directions and those directions lead me
+    the fix of adding SUBDIRECTORY_OK=Yes on L#34
+    before sourcing git-sh-setup that made it work as
+    in git-sh-setup there was a check on SUBDIRECTORY_OK
+    that prevents it to run in sub directories if it is not
+    set to ""ok"" as this file was also sourced in other commands
+    that are required to only run from root one of such scripts
+    is git-filter-branch
+
+Thanks for taking the time to contribute to Git! Please be advised that the
+Git community does not use github.com for their contributions. Instead, we use
+a mailing list (git@vger.kernel.org) for code submissions, code reviews, and
+bug reports. Nevertheless, you can use GitGitGadget (https://gitgitgadget.github.io/)
+to conveniently send your Pull Requests commits to our mailing list.
+
+Please read the ""guidelines for contributing"" linked above!
+",open,2020-03-21T14:41:53Z,sheikhhamza012,,1,3,4,2
+git,Typo: dot after sentence,730,,open,2020-03-18T10:43:49Z,hginzel,,3,2,2,2
+git,doc: use 'rev' instead of 'commit' for merge-base arguments,719,"The notation `<commit>` can be misunderstandable only for commit SHA1,
+but merge-base accepts any commit references. Like rev-parse, the name
+of arguments should be `<rev>` instead of `<commit>`.
+
+Changes since v1:
+- Use `rev` instead of `ref`, not `commit-ish` which is less used than `rev`
+  through the document.
+
+Signed-off-by: Takuya Noguchi <takninnovationresearch@gmail.com>",open,2020-03-02T14:27:36Z,tnir,,1,11,11,2
+git,"userdiff: php: Improved test cases used to catch ""abstract"" and ""final"" functions",915,"Since the original tests cases were using other detectable keywords (like ""public"" or ""protected""), they are able to pass even if the keywords intended to be covered are not present.
+In the case of the test for ""abstract"" keyword, the method's body was updated in the fixture, since PHP doesn't allow an abstract method to have a body.
+
+Signed-off-by: Javier Spagnoletti <phansys@gmail.com>
+
+cc: Johannes Sixt <j6t@kdbg.org>",open,2020-11-14T13:14:57Z,phansys,,1,5,2,2
+git,Add filter-branch.squelchWarning git config alongside FILTER_BRANCH_SQUELCH_WARNING,912,"In addition to the environment variable FILTER_BRANCH_SQUELCH_WARNING,
+the git config filter-branch.squelchWarning is checked to see if the
+usage warning should be squelched.
+
+Thanks for taking the time to contribute to Git! Please be advised that the
+Git community does not use github.com for their contributions. Instead, we use
+a mailing list (git@vger.kernel.org) for code submissions, code reviews, and
+bug reports. Nevertheless, you can use GitGitGadget (https://gitgitgadget.github.io/)
+to conveniently send your Pull Requests commits to our mailing list.
+
+Please read the ""guidelines for contributing"" linked above!
+",open,2020-11-10T11:14:54Z,dhoepfl,,1,8,2,1
+git,Simplified merge logic,911,"Thanks for taking the time to contribute to Git! Please be advised that the
+Git community does not use github.com for their contributions. Instead, we use
+a mailing list (git@vger.kernel.org) for code submissions, code reviews, and
+bug reports. Nevertheless, you can use GitGitGadget (https://gitgitgadget.github.io/)
+to conveniently send your Pull Requests commits to our mailing list.
+
+Please read the ""guidelines for contributing"" linked above!
+
+The logic for the merging is somewhat confusing. So I simplified it to be equivalent. I tested all my changes to ensure in practice they work.
+
+The first thing I did was test out which branch would occur for every possible value of 
+
+remoteheads->next | common->next | option_commit | Branch
+-- | -- | -- | --
+T | T | T | A
+T | T | F | A
+T | F | T | A
+T | F | F | A
+F | T | T | C
+F | T | F | C
+F | F | T | B
+F | F | F | A
+
+Using this truth table, I was able to deduce that if the second branch ran, the if statement for the first branch was false. Taking the inverse, it was then found many of the checks were redundant, so the if statement was rewritten to have each branch run under the same exact conditions, except each value is evaluated as little as possible.
+
+I hope you can approve of this and show me how to send it.
+
+Thank you.
+",open,2020-11-07T21:17:58Z,pi1024e,,1,38,44,1
+git,fix gcc 4.0 big endian sha1,907,"Currently, sha1.c is compiled in little endian mode when using gcc 4.0 on Mac OS X 10.4 PowerPC (which is big endian). This results in a build that always states there is a sha1 mismatch. The below patch allows big endian to be detected correctly using GCC 4.0 and probably older versions as well.
+",open,2020-10-30T20:10:43Z,alex-free,,1,8,0,1
+git,Fix potential segfault on cloning invalid tag,906,"Changes since v1:
+* Reworked the patch to use the fallback approach based on feedback from Jeff King.
+
+
+cc: Jeff King <peff@peff.net>",open,2020-10-30T08:29:28Z,sohomdatta1,,1,79,5,2
+git,Completion: Fix DWIM completion for remotes,902,"There is a redundant function, `__gitcomp_direct_append`, that has
+broken DWIM remote completion in the last few months.
+
+This commit removes this function and fixes incorrect behavior
+
+
+This commit resolves the bug reported [here](https://stackoverflow.com/questions/63776252/git-tab-completion-stopped-working-on-remote-branches/64398433#64398433) (https://stackoverflow.com/questions/63776252/git-tab-completion-stopped-working-on-remote-branches/64398433#64398433)
+
+",open,2020-10-26T16:04:53Z,vegerot,,1,1,14,1
+git,"Beginning of new merge strategy: New API, empty implementation",895,"In this series, I show the new merge API I have developed in merge-ort, and show how it differs from that provided by merge-recursive.  I do this in four steps, each corresponding to a patch.
+
+Changes since v4:
+  * Fix a bug where 'cherry-pick --continue' would report 'fatal: cherry-pick: --strategy cannot be used with --continue' when pull.twohead was set to ort (found by user of internal deployment at $DAYJOB)
+
+cc: Elijah Newren <newren@gmail.com>
+cc: Taylor Blau <me@ttaylorr.com>
+cc: Peter Baumann <peter.baumann@gmail.com>
+cc: Jonathan Tan <jonathantanmy@google.com>
+cc: Eric Sunshine <sunshine@sunshineco.com>
+cc: SZEDER Gábor <szeder.dev@gmail.com>
+cc: Jacob Keller <jacob.keller@gmail.com>",open,2020-10-21T07:48:08Z,newren,,4,517,15,13
+git,Add '*' pretty-format placeholder modifier,890,This new placeholder allows for line-feed insertion after a non-empty placeholder.,open,2020-10-18T15:20:13Z,Fointard,,2,10,0,2
+git,gitk: add option to perform 'git fetch' command,872,"There wasn't ability to perform 'git fetch' from gitk tool.
+Add 'Fetch' option to 'File' menu.
+Bind it to 'F7' key.
+
+Signed-off-by: Vladimir Chigarev <chiga17@mail.ru>
+
+Thanks for taking the time to contribute to Git! Please be advised that the
+Git community does not use github.com for their contributions. Instead, we use
+a mailing list (git@vger.kernel.org) for code submissions, code reviews, and
+bug reports. Nevertheless, you can use GitGitGadget (https://gitgitgadget.github.io/)
+to conveniently send your Pull Requests commits to our mailing list.
+
+Please read the ""guidelines for contributing"" linked above!
+",open,2020-10-09T13:50:20Z,chiga17,,1,31,0,1
+git,docs: Clarify git rm --cached function in gitignore note,862,Added text explaining that the `git rm --cached` command isn't analogous to the `gitignore` file and that the file will need to be added to `gitignore` to prevent later commits from adding the file back.,open,2020-10-05T08:11:11Z,sohomdatta1,,1,3,1,1
+git,userdiff: add userdiff patterns for ts files (TypeScript),859,"[TypeScript](https://www.typescriptlang.org/) is an open-source language which builds on JavaScript, one of the world's most used tools, by adding static type definitions. In participating this year's Open Source Day hosted as part of the virtual Grace Hopper Conference, the proposed changes aim to address [this issue](https://github.com/microsoft/TypeScript/issues/36185) of adding diff chunk header lines to Git for **.ts** file extension.
+
+The regex patterns match both traditional/arrow function expressions:
+```typescript
+const add = (a, b) => a + b
+```
+```typescript
+public function add() { ...
+```
+
+Signed-off-by: Alice Kim [aliceykim0828@gmail.com](mailto:aliceykim0828@gmail.com)",open,2020-10-02T00:50:13Z,yehee,,1,2,0,1
+git,Circleci project setup,857,"Thanks for taking the time to contribute to Git! Please be advised that the
+Git community does not use github.com for their contributions. Instead, we use
+a mailing list (git@vger.kernel.org) for code submissions, code reviews, and
+bug reports. Nevertheless, you can use GitGitGadget (https://gitgitgadget.github.io/)
+to conveniently send your Pull Requests commits to our mailing list.
+
+Please read the ""guidelines for contributing"" linked above!
+",open,2020-09-28T02:27:58Z,kadirselcuk,,4,13,0,1
+git,reftable library,847,"This splits the giant commit from https://github.com/gitgitgadget/git/pull/539 into a series of smaller commits, which build and have unittests.
+
+The final commit should also be split up, but I want to wait until we have consensus that the bottom commits look good.
+  
+
+cc: Han-Wen Nienhuys <hanwen@google.com>
+cc: Jeff King <peff@peff.net>
+cc: Ramsay Jones <ramsay@ramsayjones.plus.com>
+cc: Jonathan Nieder <jrnieder@gmail.com>
+cc: Johannes Schindelin <Johannes.Schindelin@gmx.de>
+cc: Jonathan Tan <jonathantanmy@google.com>
+cc: Josh Steadmon <steadmon@google.com>
+cc: Emily Shaffer <emilyshaffer@google.com>
+cc: Patrick Steinhardt <ps@pks.im>
+cc: Ævar Arnfjörð Bjarmason <avarab@gmail.com>",open,2020-09-16T18:42:20Z,hanwen,,13,10474,5,56
+git,config: improve error message for boolean config,841,"Currently invalid boolean config values return messages about 'bad
+numeric', which I found misleading when the error was due to a
+boolean string value. This change makes the error message reflect
+the boolean value.
+
+The current approach relies on `GIT_TEST_GETTEXT_POISON` 
+being a boolean value, moving its special case out from 
+`die_bad_number()` and into `git_config_bool_or_int()`. An
+alternative could be for `die_bad_number()` to handle boolean
+values when erroring, although the function name might need to
+change if it is handling non-numeric values.
+
+Signed-off-by: Andrew Klotz <agc.klotz@gmail.com>
+
+
+
+cc: Jeff King <peff@peff.net>
+cc: Phillip Wood <phillip.wood123@gmail.com>",open,2020-09-12T20:56:22Z,KlotzAndrew,,2,15,13,2
+git,Add struct strmap and associated utility functions,835,"Here I introduce new strmap, strintmap, and strset types.
+
+Changes since v5:
+  * Fixed a typo in forward declaration of struct mem_pool, spotted by Phillip.  (Usage via pointers meant gcc & clang wouldn't complain.)
+
+[1] https://lore.kernel.org/git/20180906191203.GA26184@sigill.intra.peff.net/
+
+CC: Jeff King <peff@peff.net>
+cc: Elijah Newren <newren@gmail.com>
+cc: Phillip Wood <phillip.wood123@gmail.com>
+cc: Chris Torek <chris.torek@gmail.com>",open,2020-08-21T16:45:03Z,newren,,15,621,170,27
+git,"GitSVN: Multi line support of ignore-path, include-paths and skiping of empty commits",834,"[PATCH]v3 GitSVN: Multi line support of ignore-path, include-paths and skiping of empty commits
+
+I used the ignore-paths option to ignore a lot of stuff I don’t need. The ignore pattern works well, but it could and up in empty commits. So just the message without any modifications / changes. The patch below skip a commit if all changes are ignored by the ignore-paths option. In order to use this feature I includes the option to read configuration for ignore-path, include-paths in several lines. So that the user is not limited by the max. char. per line definition.
+In Addition this patch includes the optimizations which are mansion from your side.
+
+Regarding the subrouties comments i oriented by this example: https://www.perlmonks.org/?node_id=29905 
+
+Changes in v3:
+- Changed the code format (spaces etc.)
+- Wrap reg-expression by (?:\<expression1\>|\<expression2\>)
+- Removed useless variable init
+- Removed useless check.
+
+",open,2020-08-18T07:17:28Z,lukaspupkalipinski,,2,60,5,3
+git,ignore binary file diffs in git-p4 commit,833,"Currently, when submitting commits, `git p4 submit` helpfully builds a diff of changes, and then displays them in a text editor before continuing (mimicking standard git commit behaviour). For changed files it asks git for the diff, but if a file is added it dumps all of its lines; to do so it opens a file, but as a text -- which obviously fails if a file is binary, raising `UnicodeDecodeError`.
+
+This simple patch catches that exception and stops building the diff, so only the name of the added file is included.
+",open,2020-08-17T20:01:16Z,berislavlopac,,1,7,3,1
+git,unpack-trees: do not set SKIP_WORKTREE on submodules,809,"Interactions between submodules and sparsity patterns have come up a few times, with a certain edge case coming up multiple times recently: should a submodule have the SKIP_WORKTREE bit set if the submodule path does not match the sparsity patterns?[1][2][3].
+
+Here I try to resolve the question, with the answer of 'no'.
+
+This patch depends on en/sparse-with-submodule-doc lightly -- the commit message in this patch references the commit from that other series.  It could possibly be considered an addition to that other topic, but ""sparse-with-submodule-doc"" implies the other topic is only a documentation change, whereas this patch involves a code change.
+
+
+
+[1] https://lore.kernel.org/git/pull.805.git.git.1591831009762.gitgitgadget@gmail.com/
+> Since submodules may have unpushed changes or untracked files,
+> removing them could result in data loss.  Thus, changing sparse
+> inclusion/exclusion rules will not cause an already checked out
+> submodule to be removed from the working copy.  Said another way, just
+> as `checkout` will not cause submodules to be automatically removed or
+> initialized even when switching between branches that remove or add
+> submodules, using `sparse-checkout` to reduce or expand the scope of
+> ""interesting"" files will not cause submodules to be automatically
+> deinitialized or initialized either.
+
+[2] https://lore.kernel.org/git/CABPp-BE+BL3Nq=Co=-kNB_wr=6gqX8zcGwa0ega_pGBpk6xYsg@mail.gmail.com/
+> If sparsity patterns would exclude a submodule that is initialized,
+> sparse-checkout clearly can't remove the submodule.  However, should
+> it set the SKIP_WORKTREE bit for that submodule if it's not going to
+> remove it?
+
+[3] https://lore.kernel.org/git/CABPp-BFJG7uFAZNidDPK2o7eHv-eYBsmcdnVxkOnKcZo7WzmFQ@mail.gmail.com/
+>> Or if you don't
+>> deinitialize a submodule that is excluded by the sparsity patterns
+>> (thus remaining in the working copy, anyway).
+>
+> This case requires more thought.  If a submodule doesn't match the
+> sparsity patterns, we already said elsewhere that sparse-checkout
+> should not remove the submodule (since doing so would risk data loss).
+> But do we set the SKIP_WORKTREE bit for it?  Generally,
+> sparse-checkout avoids removing files with modifications, and if it
+> doesn't remove them it also doesn't set the SKIP_WORKTREE bit.  For
+> consistency, should sparse-checkout not set SKIP_WORKTREE for
+> initialized submodules?
+
+CC: matheus.bernardino@usp.br, dstolee@microsoft.com",open,2020-06-17T00:18:24Z,newren,,1,3,2,1
+git,doc: ls-tree paths do not support wildcards,796,"The documentation for `ls-tree` says that paths can be wildcards, but this appears to be incorrect, only raw paths seem to work.",open,2020-05-28T19:23:19Z,onlynone,,1,9,3,2
+git,Add gitpod config,790,"this commit adds support for Gitpod.io, a free automated
+dev environment that makes contributing and generally working on GitHub
+projects much easier. It allows anyone to start a ready-to-code dev
+environment for any branch, issue and pull request with a single click.
+
+
+Thanks for taking the time to contribute to Git! Please be advised that the
+Git community does not use github.com for their contributions. Instead, we use
+a mailing list (git@vger.kernel.org) for code submissions, code reviews, and
+bug reports. Nevertheless, you can use GitGitGadget (https://gitgitgadget.github.io/)
+to conveniently send your Pull Requests commits to our mailing list.
+
+Please read the ""guidelines for contributing"" linked above!
+",open,2020-05-21T11:44:11Z,mikeg98,,2,17,0,4
+git,Change the explanation so that it cannot be misinterpreted.,769,"The "", as if you are giving orders to the codebase to change its behavior"" describes a correct and two incorrect examples. It is unclear which of the examples it refers to and can be easily misinterpreted.
+
+Thanks for taking the time to contribute to Git! Please be advised that the
+Git community does not use github.com for their contributions. Instead, we use
+a mailing list (git@vger.kernel.org) for code submissions, code reviews, and
+bug reports. Nevertheless, you can use GitGitGadget (https://gitgitgadget.github.io/)
+to conveniently send your Pull Requests commits to our mailing list.
+
+Please read the ""guidelines for contributing"" linked above!
+",open,2020-04-27T06:34:41Z,mickerules,,2,6,4,1
+git,gitweb: fix tests on uninitialized hash indexes to avoid uninitialized value warnings in server log,767,"It's happened that I tried to solve lots of meaningless warnings
+in web server error log.
+
+I think it makes no sense to spam error log with warnings about
+uninitialized value when trying to run careless tests on undefined
+hash indexes.
+
+This is a simple fix that I did long ago that check carefully the
+index before running tests on it.
+
+I added myself as warning fix author as well.
+
+My goal is to avoid re-applying the patch on each distribution update.
+
+The warning message fixed in web server error log :
+Use of uninitialized value $params{""action""} in string eq at gitweb.cgi
+line 1377
+
+Raphaël Gertz:
+ gitweb/README: add myself as warning fix author
+ gitweb/gitweb.perl: fix careless test on undefined hash indexes
+
+ gitweb/README      | 3 +++
+ gitweb/gitweb.perl | 4 ++--
+ 2 files changed, 5 insertions(+), 2 deletions(-)
+
+Signed-off-by: Raphaël Gertz <git@rapsys.eu>",open,2020-04-24T12:20:39Z,rapsys,,1,5,2,2
+git,Xdiff as submodule,765,"This PR is here for CI testing. 
+",open,2020-04-22T05:43:56Z,j143,,1,4,4242,17
+git,Localize the repository variable,763,"Hi, this issue has already been discussed [on the mailing list](https://public-inbox.org/git/pull.545.git.1581535151.gitgitgadget@gmail.com/#t).
+Just to brief, it passes `r` as a parameter to all functions in object.c which use `the_repository` as a global variable otherwise.
+",open,2020-04-19T10:02:19Z,ParthGala2k,,5,89,61,20
+git,new feature: `GIT_CONFIG_OVERRIDE=~/gitconfig_tmp git args...`,761,"this patch/PR implements the feature I've been asking for in
+https://public-inbox.org/git/CANri+Ey71QbWxNH+RhMfYuUSDEpYtv28ushUhK8Tt0xWUAU9iw@mail.gmail.com/
+A new environment variable `GIT_CONFIG_OVERRIDE` allows bypassing
+system+user config files and instead use $GIT_CONFIG_OVERRIDE as config file;
+when empty, it'll just not parse any user/system/override config file.
+However the repo config file is still read.
+Examples:
+```
+GIT_CONFIG_OVERRIDE=~/gitconfig_tmp git diff # skip system/user cfg files
+and read instead ~/gitconfig_tmp
+GIT_CONFIG_OVERRIDE= git remote -v # skip system/user cfg files 
+```
+
+## rationale
+before this patch, git makes it impossible to ignore or override global
+(system+user) gitconfig. This is essentially what's being asked here:
+https://stackoverflow.com/questions/23400449/how-to-make-git-temporarily-ignore-gitconfig
+except I'm also allowing to read a custom config file. Note that that config
+file can `include` other files including user config file, if user wants
+to, so no loss of generality.
+
+## existing alternatives are not good
+* temporarily moving ~/.gitconfig (+other locations eg XDG + system) is
+error prone (needs to be undone, and can affect other running processes)
+* setting `GIT_CONFIG` is a noop for most git commands, eg `git diff`
+* adding a flag, eg `--gitconfig_override ~/gitconfig_tmp`, is not good, as
+there'd be no way to pass that flag in a complex script with lots of
+`git` command invocations; especially if called from a binary
+
+CC: Jeff King <peff@peff.net>
+
+",open,2020-04-18T08:51:13Z,timotheecour,,1,32,12,3
+git,clone: document partial clone section,745,"Partial clones are created using 'git clone', but there is no related
+help information in the git-clone documentation during a period. Add
+a relevant section to help users understand what partial clones are
+and how they differ from normal clones.
+
+The section briefly introduces the applicable scenarios and some
+precautions of partial clone. If users want to know more about its
+technical design and other details, users can view the link of
+git-partial-clone(7) according to the guidelines in the section.
+
+cc: Philippe Blain <levraiphilippeblain@gmail.com>",open,2020-04-01T14:40:27Z,dyrone,,1,69,0,1
+git,t\lib-submodule-update.sh: change `test -(e|f|d)` to `test_path_is_*`,741,"Change `test -(e|f|d)` to helper functions for easier debugging.
+GSoC Microproject.
+(From: https://git.github.io/SoC-2020-Microprojects/#use-test_path_is_-functions-in-test-scripts)
+Find one test script that verifies the presence/absence of
+files/directories with `test -(e|f|d|…)` and replace them with the
+appropriate test_path_is_file, test_path_is_dir, etc. helper functions.
+
+Signed-off-by: Kartik Soneji <kartiksoneji@rocketmail.com>
+",open,2020-03-28T17:17:43Z,KartikSoneji,,1,12,12,1
+git,bisect: remove root directory restriction for git bisect,736,"    according to the open issue #486 the git bisect
+    command should be able to run from inside any
+    subdirectory and in the same disscusion ""dscho""
+    gave the directions and those directions lead me
+    the fix of adding SUBDIRECTORY_OK=Yes on L#34
+    before sourcing git-sh-setup that made it work as
+    in git-sh-setup there was a check on SUBDIRECTORY_OK
+    that prevents it to run in sub directories if it is not
+    set to ""ok"" as this file was also sourced in other commands
+    that are required to only run from root one of such scripts
+    is git-filter-branch
+
+Thanks for taking the time to contribute to Git! Please be advised that the
+Git community does not use github.com for their contributions. Instead, we use
+a mailing list (git@vger.kernel.org) for code submissions, code reviews, and
+bug reports. Nevertheless, you can use GitGitGadget (https://gitgitgadget.github.io/)
+to conveniently send your Pull Requests commits to our mailing list.
+
+Please read the ""guidelines for contributing"" linked above!
+",open,2020-03-21T14:41:53Z,sheikhhamza012,,1,3,4,2
+git,Typo: dot after sentence,730,,open,2020-03-18T10:43:49Z,hginzel,,3,2,2,2
+git,doc: use 'rev' instead of 'commit' for merge-base arguments,719,"The notation `<commit>` can be misunderstandable only for commit SHA1,
+but merge-base accepts any commit references. Like rev-parse, the name
+of arguments should be `<rev>` instead of `<commit>`.
+
+Changes since v1:
+- Use `rev` instead of `ref`, not `commit-ish` which is less used than `rev`
+  through the document.
+
+Signed-off-by: Takuya Noguchi <takninnovationresearch@gmail.com>",open,2020-03-02T14:27:36Z,tnir,,1,11,11,2
