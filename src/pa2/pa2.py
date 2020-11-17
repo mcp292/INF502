@@ -14,18 +14,22 @@ def format_json(data):
 
 
 def get_repo_summary(repo_index):
-    repo = repos_list[repo_index]
-    open_pull_requests = len([p for p in repo.pull_requests if p.state == "open"])
-    closed_pull_requests = len([p for p in repo.pull_requests if p.state == "closed"])
-    users = len(set([p.user for p in repo.pull_requests]))
-    oldest_pull_request = min([parser.parse(p.date_of_creation) for p in repo.pull_requests])
-    temp_users = list(set([p.user for p in repo.pull_requests]))
+    try:
+        repo = repos_list[repo_index]
+        open_pull_requests = len([p for p in repo.pull_requests if p.state == "open"])
+        closed_pull_requests = len([p for p in repo.pull_requests if p.state == "closed"])
+        users = len(set([p.user for p in repo.pull_requests]))
+        oldest_pull_request = min([parser.parse(p.date_of_creation) for p in repo.pull_requests])
+        temp_users = list(set([p.user for p in repo.pull_requests]))
 
-    print("\nSummary for " + str(repo.name) + " repository")
-    print("No. of pull requests in open state   : " + str(open_pull_requests))
-    print("No. of pull requests in closed state : " + str(closed_pull_requests))
-    print("No. of users                         : " + str(users))
-    print("Oldest pull request                  : " + str(oldest_pull_request.strftime('%m/%d/%Y')))
+        print("\nSummary for " + str(repo.name) + " repository")
+        print("No. of pull requests in open state   : " + str(open_pull_requests))
+        print("No. of pull requests in closed state : " + str(closed_pull_requests))
+        print("No. of users                         : " + str(users))
+        print("Oldest pull request                  : " + str(oldest_pull_request.strftime('%m/%d/%Y')))
+    except:
+        raise IndexError
+
 
 
 def print_graphics(repo_index):
@@ -79,7 +83,7 @@ def print_graphics_all():
     # get all pull requests for all repos
     pull_requests_list = []
     [pull_requests_list.extend(r.pull_requests) for r in repos_list]
-    
+
     df = pd.DataFrame([p.as_dict() for p in pull_requests_list])
 
     df['date_of_creation'] = [parser.parse(x).date() for x in df['date_of_creation']]
@@ -172,88 +176,95 @@ def get_corr_users():
     print(df.corr())
 
 
-def get_corr_pull_requests(repo_index):    
-    repo = repos_list[repo_index]
-    df = pd.DataFrame([p.as_dict() for p in repo.pull_requests])
-    df = df[['commits', 'additions', 'deletions', 'changed_files']]
-    df['commits'] = pd.to_numeric(df['commits'])
-    df['additions'] = pd.to_numeric(df['additions'])
-    df['deletions'] = pd.to_numeric(df['deletions'])
-    df['changed_files'] = pd.to_numeric(df['changed_files'])
-    print(df.corr())
+def get_corr_pull_requests(repo_index):
+    try:
+        repo = repos_list[repo_index]
+        df = pd.DataFrame([p.as_dict() for p in repo.pull_requests])
+        df = df[['commits', 'additions', 'deletions', 'changed_files']]
+        df['commits'] = pd.to_numeric(df['commits'])
+        df['additions'] = pd.to_numeric(df['additions'])
+        df['deletions'] = pd.to_numeric(df['deletions'])
+        df['changed_files'] = pd.to_numeric(df['changed_files'])
+        print(df.corr())
+    except:
+        raise IndexError
 
 
 class Repo:
     def __init__(self, user, repo):
         print("Collecting repo data...")
-        
+
         response = sesh.get("https://api.github.com/repos/{}/{}".format(user, repo))
         # response = requests.get("https://api.github.com/repos/{}/{}".format(user, repo))
-        repo_data = response.json()
-        # print(self.format_json(repo_data))
 
-        self.name = repo_data["name"]
-        self.owner = repo_data["owner"]["login"]
-        self.description = repo_data["description"]
-        self.homepage = repo_data["homepage"]
-        self.repo_license = repo_data["license"]["name"] 
-        self.num_forks = repo_data["forks_count"]
-        self.watchers = repo_data["watchers"]
-        self.date_of_collection = date.today()
-        self.num_stars = repo_data["stargazers_count"]
+        if response.status_code == 200:
+            repo_data = response.json()
+            # print(self.format_json(repo_data))
 
-        # get pull request data from first page (1)
-        print("Collecting pull request data...")
-        
-        response = sesh.get("https://api.github.com/repos/{}/{}/pulls?page={}".format(user, repo, 1))
-        # response = requests.get("https://api.github.com/repos/{}/{}/pulls?page={}".format(user, repo, 1))
-        pull_request_data = response.json()
+            self.name = repo_data["name"]
+            self.owner = repo_data["owner"]["login"]
+            self.description = repo_data["description"]
+            self.homepage = repo_data["homepage"]
+            self.repo_license = repo_data["license"]["name"]
+            self.num_forks = repo_data["forks_count"]
+            self.watchers = repo_data["watchers"]
+            self.date_of_collection = date.today()
+            self.num_stars = repo_data["stargazers_count"]
 
-        # extract pull requests
-        self.pull_requests = []
-        
-        for pull_request in pull_request_data:
-            self.pull_requests.append(PullRequest(pull_request, user, repo))
+            # get pull request data from first page (1)
+            print("Collecting pull request data...")
 
-        # for each extracted pull request store author
-        print("Collecting user data...")
+            response = sesh.get("https://api.github.com/repos/{}/{}/pulls?page={}".format(user, repo, 1))
+            # response = requests.get("https://api.github.com/repos/{}/{}/pulls?page={}".format(user, repo, 1))
+            pull_request_data = response.json()
 
-        self.authors = []
-        existing_author = None  # default
-        
-        for pull_request in self.pull_requests:
-            # check if author already added
-            for author in self.authors:
-                if (pull_request.user == author.user):
-                    existing_author = author
+            # extract pull requests
+            self.pull_requests = []
 
-            # if author exists increment num pull requests
-            if (existing_author != None):
-                existing_author.inc_num_pull_requests()
-            else:
-                # add to list
-                self.authors.append(Author(pull_request.user))
+            for pull_request in pull_request_data:
+                self.pull_requests.append(PullRequest(pull_request, user, repo))
 
-            # reset to default
-            existing_author = None
-        
-        # write to csv
-        # we did it here to make sure all the information is complete
-        # before writing (users with multiple pull requests etc.)
-        self.write_to_csv(user, repo, self.pull_requests, self.authors)
-        
-        # print()
-        # print(self.name)
-        # print(self.owner)
-        # print(self.description)
-        # print(self.homepage)
-        # print(self.num_forks)
-        # print(self.watchers)
-        # print(self.date_of_collection)
-        # print(self.num_stars)
-        # print([str(item) for item in self.pull_requests])
-        # print([str(item) for item in self.authors])
-        
+            # for each extracted pull request store author
+            print("Collecting user data...")
+
+            self.authors = []
+            existing_author = None  # default
+
+            for pull_request in self.pull_requests:
+                # check if author already added
+                for author in self.authors:
+                    if (pull_request.user == author.user):
+                        existing_author = author
+
+                # if author exists increment num pull requests
+                if (existing_author != None):
+                    existing_author.inc_num_pull_requests()
+                else:
+                    # add to list
+                    self.authors.append(Author(pull_request.user))
+
+                # reset to default
+                existing_author = None
+
+            # write to csv
+            # we did it here to make sure all the information is complete
+            # before writing (users with multiple pull requests etc.)
+            self.write_to_csv(user, repo, self.pull_requests, self.authors)
+
+            # print()
+            # print(self.name)
+            # print(self.owner)
+            # print(self.description)
+            # print(self.homepage)
+            # print(self.num_forks)
+            # print(self.watchers)
+            # print(self.date_of_collection)
+            # print(self.num_stars)
+            # print([str(item) for item in self.pull_requests])
+            # print([str(item) for item in self.authors])
+        else:
+            print("Request Failed with code: ",response.status_code)
+            raise ValueError
 
     def __str__(self):
         return "{}/{}: {} ({})".format(self.owner, self.name, self.description, self.num_stars)
@@ -269,7 +280,7 @@ class Repo:
 
         with open(filename, mode='a', newline='') as CSVfile:
             file_writer = csv.writer(CSVfile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-            
+
             if(not file_exist):
                 file_writer.writerow(header)
 
@@ -304,7 +315,7 @@ class PullRequest:
         self.date_of_creation = pull_request["created_at"]
         self.user = pull_request["user"]["login"]
         self.closing_date = None
-        
+
         if (self.state != "open"):
             self.closing_date = pull_request["closed_at"]
 
@@ -317,7 +328,7 @@ class PullRequest:
         self.additions = pull_request_data["additions"]
         self.deletions = pull_request_data["deletions"]
         self.changed_files = pull_request_data["changed_files"]
-        
+
         # print all
         # print()
         # print(self.title)
@@ -325,7 +336,7 @@ class PullRequest:
         # # print(self.body)
         # print(self.state)
         # print(self.date_of_creation)
-        # print(self.user)               
+        # print(self.user)
         # if (self.closing_date != None):
         #     print(self.closing_date)
         # print(self.num_commits)
@@ -333,8 +344,8 @@ class PullRequest:
         # print(self.deletions)
         # print(self.changed_files)
         # END print all
-        
-        
+
+
     def __str__(self):
         return "{} ({})".format(self.title, self.state)
 
@@ -342,7 +353,7 @@ class PullRequest:
     def to_CSV(self, filename):
         directory = os.getcwd() + "/repos"
         path = "{}/{}".format(directory, filename)
-        
+
         # if dir doesn't exist
         if (not os.path.exists(directory)):
             try:
@@ -351,10 +362,10 @@ class PullRequest:
                 print ("Creation of the directory %s failed" % directory)
 
         file_exist = os.path.exists(path)
-        
+
         with open(path, mode='a', newline='') as CSVfile:
             file_writer = csv.writer(CSVfile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-            
+
             if (not file_exist):
                 file_writer.writerow(vars(self))
 
@@ -374,11 +385,11 @@ class Author:
         # set defaults for pages that might not have this data
         self.num_followers = 0
         self.num_following = 0
-        self.num_contributions = 0       
+        self.num_contributions = 0
         self.num_repos = 0
-        
+
         # scrape user info from page
-        response = requests.get("https://github.com/{}".format(user))        
+        response = requests.get("https://github.com/{}".format(user))
         soup = bs(response.content, "html.parser")
 
         # if user found
@@ -400,22 +411,22 @@ class Author:
             num_repos = num_repos.find("span", attrs={"class": "Counter"}) # find it! scrape it!
             self.num_repos = int(num_repos.text) + 1 # it's a counter so it starts at zero (add 1)
 
-            # get number contributions in last year 
+            # get number contributions in last year
             num_contributions = soup.find("div", attrs={"class": "js-yearly-contributions"}) # inside this block
             num_contributions = num_contributions.find("h2") # find it! scrape it!
             self.num_contributions = int("".join(filter(str.isdigit, num_contributions.text))) # get number from str
         # else:
         #     print(user, "not found");
         #     print()
-            
-        
+
+
     def inc_num_pull_requests(self):
         self.num_pull_requests += 1
 
 
     def __str__(self):
         return "{}: {}".format(self.user, self.num_pull_requests)
-            
+
 
     def to_CSV(self, filename):
         file_exist = os.path.exists(filename)
@@ -424,7 +435,7 @@ class Author:
 
         with open(filename, mode='a', newline='') as CSVfile:
             file_writer = csv.writer(CSVfile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-            
+
             if(not file_exist):
                 file_writer.writerow(header)
 
@@ -436,77 +447,108 @@ class Author:
                 'contributions': self.num_contributions, 'pull_requests': self.num_pull_requests,
                 'repositories': self.num_repos}
 
-if __name__ == "__main__":
-    # global vars
+
+
+################### TEST SECTION ########################
+
+import unittest
+
+class TestFoo(unittest.TestCase):
+    def test_no_Repo_case(self):
+        self.failUnlessRaises(ValueError, Repo,"Jabref","NO_REPO")
+    def test_no_owner_case(self):
+        self.failUnlessRaises(ValueError, Repo,"NO_OWNER","Jabref")
+    def test_get_repo_summary(self):
+        self.failUnlessRaises(IndexError, get_repo_summary,-5)
+    def test_get_corr_pull_requests(self):
+        self.failUnlessRaises(IndexError, get_corr_pull_requests,-5)
+
+if __name__ == '__main__':
     login_list = []
     users_list = []
     pull_requests_list = []
     repos_list = []
-
-    username = 'mcp292'
-    token = ''        
+    username = 'gorkemnisanci96'
+    token = '3668b7520d93f97e66041d9e40ae20c7b3b4e970'
     sesh = requests.Session()
     sesh.auth = (username, token)
+    unittest.main()
 
-    # check rate limit
-    # response = sesh.get("https://api.github.com/users/{}".format(username))
-    # print(format_json(dict(response.headers)))
+########################################################
 
-    select = 0
 
-    try:
-        while select != 10:
 
-            print("Choose from one of the following options: ")
-            print("\t1. Data for a specific repository from github")
-            print("\t2. List all the collected repositories")
-            print("\t3. List all pull requests from an existing repository")
-            print("\t4. List the summary of a repository")
-            print("\t5. Create graphics for a given repository")
-            print("\t6. Create graphics for all the collected repositories")
-            print("\t7. Calculate correlation between the data collected for users")
-            print("\t8. Calculate correlation between all the numeric data in the pull requests for a repository")
-            print("\t9. Exit")
+#if __name__ == "__main__":
+#    # global vars
+#    login_list = []
+#    users_list = []
+#    pull_requests_list = []
+#    repos_list = []
 
-            select = int(input("Enter your choice: "))
-            if select == 1:
-                owner = input("Enter the github owner name: ")
-                repo = input("Enter the repository name: ")
-                print()
-                repos_list.append(Repo(owner, repo))
-            elif select == 2:
-                list_all_repos()
-            elif select == 3:
-                list_all_repos()
-                print("Select a repo from the list")
-                index = int(input("Enter index of repo: "))
-                list_all_pull_requests(index - 1)
-            elif select == 4:
-                list_all_repos()
-                print("Select a repo from the list")
-                index = int(input("Enter index of repo: "))
-                get_repo_summary(index - 1)
-            elif select == 5:
-                list_all_repos()
-                print("Select a repo from the list")
-                index = int(input("Enter index of repo: "))
-                print_graphics(index - 1)
-            elif select == 6:
-                print_graphics_all()
-            elif select == 7:
-                get_corr_users()
-            elif select == 8:
-                list_all_repos()
-                print("Select repo from the list")
-                index = int(input("Enter index of repo: "))
-                print()
-                get_corr_pull_requests(index - 1)
-            elif select == 9:
-                break
-            else:
-                print("invalid selection")
+#    username = 'mcp292'
+#    token = ''
+#    sesh = requests.Session()
+#    sesh.auth = (username, token)
 
-            print()
+#    # check rate limit
+#    # response = sesh.get("https://api.github.com/users/{}".format(username))
+#    # print(format_json(dict(response.headers)))
 
-    except Exception as e:
-        print(e)
+#    select = 0
+
+#    try:
+#        while select != 10:
+
+#            print("Choose from one of the following options: ")
+#            print("\t1. Data for a specific repository from github")
+#            print("\t2. List all the collected repositories")
+#            print("\t3. List all pull requests from an existing repository")
+#            print("\t4. List the summary of a repository")
+#            print("\t5. Create graphics for a given repository")
+#            print("\t6. Create graphics for all the collected repositories")
+#            print("\t7. Calculate correlation between the data collected for users")
+#            print("\t8. Calculate correlation between all the numeric data in the pull requests for a repository")
+#            print("\t9. Exit")
+
+#            select = int(input("Enter your choice: "))
+#            if select == 1:
+#                owner = input("Enter the github owner name: ")
+#                repo = input("Enter the repository name: ")
+#                print()
+#                repos_list.append(Repo(owner, repo))
+#            elif select == 2:
+#                list_all_repos()
+#            elif select == 3:
+#                list_all_repos()
+#                print("Select a repo from the list")
+#                index = int(input("Enter index of repo: "))
+#                list_all_pull_requests(index - 1)
+#            elif select == 4:
+#                list_all_repos()
+#                print("Select a repo from the list")
+#                index = int(input("Enter index of repo: "))
+#                get_repo_summary(index - 1)
+#            elif select == 5:
+#                list_all_repos()
+#                print("Select a repo from the list")
+#                index = int(input("Enter index of repo: "))
+#                print_graphics(index - 1)
+#            elif select == 6:
+#                print_graphics_all()
+#            elif select == 7:
+#                get_corr_users()
+#            elif select == 8:
+#                list_all_repos()
+#                print("Select repo from the list")
+#                index = int(input("Enter index of repo: "))
+#                print()
+#                get_corr_pull_requests(index - 1)
+#            elif select == 9:
+#                break
+#            else:
+#                print("invalid selection")
+
+#            print()
+
+#    except Exception as e:
+#        print(e)
